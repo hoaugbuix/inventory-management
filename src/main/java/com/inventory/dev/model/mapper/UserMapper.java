@@ -5,6 +5,8 @@ import com.inventory.dev.entity.UserEntity;
 import com.inventory.dev.model.dto.UserDto;
 import com.inventory.dev.model.request.CreateUserReq;
 import com.inventory.dev.util.HashingPassword;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -19,7 +21,8 @@ public class UserMapper {
         user.setEmail(req.getEmail());
         user.setUsername(req.getUsername());
         //hash
-        user.setPassword(HashingPassword.encrypt(req.getPassword()));
+        String hash = BCrypt.hashpw(req.getPassword(), BCrypt.gensalt(12));
+        user.setPassword(hash);
         user.setActiveFlag(1);
         user.setCreatedDate(new Date(System.currentTimeMillis()));
         user.setUpdatedDate(new Date(System.currentTimeMillis()));

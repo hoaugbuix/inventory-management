@@ -22,28 +22,27 @@ import java.util.Set;
 public class CustomUserDetails implements UserDetails {
     static final Logger logger = Logger.getLogger(CustomUserDetails.class);
 
-    private UserEntity userEntity;
+    private UserEntity user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         HashSet<GrantedAuthority> grantedAuthorities = new HashSet<>();
-//        Set<RoleEntity> roles = userEntity.getRoles();
-        for (RoleEntity role : userEntity.getRoles()) {
-            logger.info("UserProfile : {} " + role + "role name: " + role.getRoleName());
+        Set<RoleEntity> roles = user.getRoles();
+        for (RoleEntity role : roles) {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
         }
-        logger.info("authorities : {}" + grantedAuthorities);
+//        logger.info("authorities : {}" + grantedAuthorities);
         return grantedAuthorities;
     }
 
     @Override
     public String getPassword() {
-        return userEntity.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userEntity.getEmail();
+        return user.getEmail();
     }
 
     @Override
@@ -53,7 +52,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
@@ -65,4 +64,5 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

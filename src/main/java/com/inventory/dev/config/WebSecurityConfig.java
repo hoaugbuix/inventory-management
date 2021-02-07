@@ -19,13 +19,9 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
-@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        securedEnabled = true,
-        jsr250Enabled = true,
-        prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@Configuration
+public class WebSecurityConfig<CustomUserDetailService> extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
@@ -45,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
@@ -60,7 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/api/order", "/tai-khoan", "/tai-khoan/**", "/api/change-password", "/api/update-profile").authenticated()
-                .antMatchers("/admin/**", "/api/admin/**").hasRole("admin")
+                .antMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/login").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .logout()

@@ -4,7 +4,6 @@ import com.inventory.dev.entity.MenuEntity;
 import com.inventory.dev.entity.UserEntity;
 import com.inventory.dev.exception.BadRequestException;
 import com.inventory.dev.model.mapper.UserMapper;
-import com.inventory.dev.model.payload.JwtAuthenticationResponse;
 import com.inventory.dev.model.request.LoginReq;
 import com.inventory.dev.security.CustomUserDetails;
 import com.inventory.dev.security.JwtTokenUtil;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -64,7 +62,7 @@ public class LoginController {
 
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginReq req, HttpServletResponse response) {
-//        // Authenticate
+        // Authenticate
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -81,11 +79,12 @@ public class LoginController {
             cookie.setPath("/");
             response.addCookie(cookie);
 
-            return ResponseEntity.ok(UserMapper.toUserDto(((CustomUserDetails)  authentication.getPrincipal()).getUserEntity()));
+            return ResponseEntity.ok(UserMapper.toUserDto(((CustomUserDetails)  authentication.getPrincipal()).getUser()));
         } catch (Exception ex) {
             throw new BadRequestException("Email hoặc mật khẩu không chính xác");
         }
     }
+
 
     @PostMapping("/processLogin")
     public String processLogin(Model model, @ModelAttribute("loginForm") @Validated UserEntity users, BindingResult result, HttpSession session) {

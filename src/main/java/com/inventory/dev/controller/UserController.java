@@ -71,8 +71,6 @@ public class UserController {
 
         UserEntity result = userService.createUser(req);
 
-        System.out.println(result.getEmail());
-
         // Gen token
         UserDetails principal = new CustomUserDetails(result);
         String token = jwtTokenUtil.generateToken(principal);
@@ -82,12 +80,10 @@ public class UserController {
         cookie.setMaxAge(MAX_AGE_COOKIE);
         cookie.setPath("/");
         response.addCookie(cookie);
-        System.out.println(response);
-        System.out.println(token);
         try {
             return ResponseEntity.ok(UserMapper.toUserDto(result));
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e);
             return ResponseEntity.badRequest().build();
         }
     }

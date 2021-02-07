@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
@@ -21,27 +20,15 @@ public class JwtUserDetailsService implements UserDetailsService {
     UserRepository userRepository;
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findAllByEmail(s)
+        UserEntity user = userRepository.findByEmail(s)
                 .orElseThrow(() ->
                         new NotFoundException("User not found [email: " + s + "]")
                 );
-        log.info("user" + user.toString());
-
         if (user != null) {
             return new CustomUserDetails(user);
         } else {
             throw new UsernameNotFoundException("User get email " + s + " does not exist.");
         }
-    }
-
-    @Transactional
-    public UserDetails loadUserById(Integer id) {
-        UserEntity user = userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User", "id", id)
-        );
-
-        return new CustomUserDetails(user);
     }
 }

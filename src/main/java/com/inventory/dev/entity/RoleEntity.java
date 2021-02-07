@@ -18,7 +18,7 @@ public class RoleEntity extends BaseEntity {
     @Column(name = "description", nullable = true, length = 200)
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "roles")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "roles")
     private Set<UserEntity> users;
 
 }

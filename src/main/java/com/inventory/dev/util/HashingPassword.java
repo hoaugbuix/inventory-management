@@ -17,7 +17,6 @@ public class HashingPassword {
             byte[] hashPass = md.digest(originPassword.getBytes(StandardCharsets.US_ASCII));
             result = Base64.getEncoder().encodeToString(hashPass).substring(0, 32);
         } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return result;
