@@ -1,6 +1,7 @@
 package com.inventory.dev.validate;
 
 import com.inventory.dev.entity.CategoryEntity;
+import com.inventory.dev.service.CategoryService;
 import com.inventory.dev.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,11 +15,10 @@ import java.util.List;
 @Component
 public class CategoryValidator implements Validator {
     @Autowired
-    private ProductService productService;
+    private CategoryService categoryService;
 
     @Override
     public boolean supports(Class<?> clazz) {
-        // TODO Auto-generated method stub
         return clazz == CategoryEntity.class;
     }
 
@@ -29,7 +29,7 @@ public class CategoryValidator implements Validator {
         ValidationUtils.rejectIfEmpty(errors, "name", "msg.required");
         ValidationUtils.rejectIfEmpty(errors, "description", "msg.required");
         if (category.getCode() != null) {
-            List<CategoryEntity> results = productService.findCategory("code", category.getCode());
+            List<CategoryEntity> results = categoryService.findCategory("code", category.getCode());
             if (results != null && !results.isEmpty()) {
                 if (category.getId() != null && category.getId() != 0) {
                     if (results.get(0).getId() != category.getId()) {

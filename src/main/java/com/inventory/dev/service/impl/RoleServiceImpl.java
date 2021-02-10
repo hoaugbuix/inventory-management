@@ -3,6 +3,7 @@ package com.inventory.dev.service.impl;
 import com.inventory.dev.dao.RoleDAO;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.RoleEntity;
+import com.inventory.dev.model.request.CreateRoleReq;
 import com.inventory.dev.service.RoleService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     public void saveRole(RoleEntity role) throws Exception {
-        log.info("Insert role " + role.toString());
+        log.info("Insert role "+role.toString());
         role.setActiveFlag(1);
         role.setCreatedDate(new Date());
         role.setUpdatedDate(new Date());
@@ -55,7 +56,7 @@ public class RoleServiceImpl implements RoleService {
         return roleDAO.findByProperty(property, value);
     }
 
-    public RoleEntity findByIdRole(long id) {
+    public RoleEntity findByIdRole(int id) {
         log.info("find role by id =" + id);
         return roleDAO.findById(RoleEntity.class, id);
     }

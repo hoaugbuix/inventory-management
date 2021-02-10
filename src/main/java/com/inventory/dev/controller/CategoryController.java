@@ -2,12 +2,14 @@ package com.inventory.dev.controller;
 
 import com.inventory.dev.entity.CategoryEntity;
 import com.inventory.dev.entity.Paging;
+import com.inventory.dev.service.CategoryService;
 import com.inventory.dev.service.ProductService;
 import com.inventory.dev.util.Constant;
 import com.inventory.dev.validate.CategoryValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,15 +18,15 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class CategoryController {
     static final Logger log = Logger.getLogger(CategoryController.class);
     @Autowired
-    private ProductService productService;
+    private CategoryService categoryService;
     @Autowired
     private CategoryValidator categoryValidator;
 
@@ -49,7 +51,7 @@ public class CategoryController {
     public String showCategoryList(Model model, HttpSession session, @ModelAttribute("searchForm") CategoryEntity category, @PathVariable("page") int page) {
         Paging paging = new Paging(1);
         paging.setIndexPage(page);
-        List<CategoryEntity> categories = productService.getAllCategory(category, paging);
+        List<CategoryEntity> categories = categoryService.getAllCategory(category, paging);
         if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
             model.addAttribute(Constant.MSG_SUCCESS, session.getAttribute(Constant.MSG_SUCCESS));
             session.removeAttribute(Constant.MSG_SUCCESS);
@@ -75,7 +77,7 @@ public class CategoryController {
     @GetMapping("/category/edit/{id}")
     public String edit(Model model, @PathVariable("id") int id) {
         log.info("Edit category with id=" + id);
-        CategoryEntity category = productService.findByIdCategory(id);
+        CategoryEntity category = categoryService.findByIdCategory(id);
         if (category != null) {
             model.addAttribute("titlePage", "Edit Category");
             model.addAttribute("modelForm", category);
@@ -86,16 +88,14 @@ public class CategoryController {
     }
 
     @GetMapping("/category/view/{id}")
-    public String view(Model model, @PathVariable("id") int id) {
+    public ResponseEntity<?> view(@Valid @PathVariable("id") int id) {
         log.info("View category with id=" + id);
-        CategoryEntity category = productService.findByIdCategory(id);
+        CategoryEntity category = categoryService.findByIdCategory(id);
+        Set<Object> data = new HashSet<>();
         if (category != null) {
-            model.addAttribute("titlePage", "View Category");
-            model.addAttribute("modelForm", category);
-            model.addAttribute("viewOnly", true);
-            return "category-action";
+            data.add(category);
         }
-        return "redirect:/category/list";
+        return ResponseEntity.ok(data);
     }
 
     @PostMapping("/category/save")
@@ -114,7 +114,7 @@ public class CategoryController {
         }
         if (category.getId() != null && category.getId() != 0) {
             try {
-                productService.updateCategory(category);
+                categoryService.updateCategory(category);
                 session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
             } catch (Exception e) {
                 // TODO Auto-generated catch block
@@ -125,7 +125,7 @@ public class CategoryController {
 
         } else {
             try {
-                productService.saveCategory(category);
+                categoryService.saveCategory(category);
                 session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
             } catch (Exception e) {
                 // TODO Auto-generated catch block
@@ -140,10 +140,10 @@ public class CategoryController {
     @GetMapping("/category/delete/{id}")
     public String delete(Model model, @PathVariable("id") int id, HttpSession session) {
         log.info("Delete category with id=" + id);
-        CategoryEntity category = productService.findByIdCategory(id);
+        CategoryEntity category = categoryService.findByIdCategory(id);
         if (category != null) {
             try {
-                productService.deleteCategory(category);
+                categoryService.deleteCategory(category);
                 session.setAttribute(Constant.MSG_SUCCESS, "Delete success!!!");
             } catch (Exception e) {
                 // TODO Auto-generated catch block

@@ -3,12 +3,16 @@ package com.inventory.dev.controller;
 import com.inventory.dev.entity.CategoryEntity;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.ProductInfoEntity;
+import com.inventory.dev.exception.BadRequestException;
+import com.inventory.dev.exception.NotFoundException;
+import com.inventory.dev.service.CategoryService;
 import com.inventory.dev.service.ProductService;
 import com.inventory.dev.util.Constant;
 import com.inventory.dev.validate.ProductInfoValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +32,10 @@ public class ProductInfoController {
     static final Logger log = Logger.getLogger(ProductInfoController.class);
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private CategoryService categoryService;
+
     @Autowired
     private ProductInfoValidator productInfoValidator;
 
@@ -49,29 +57,24 @@ public class ProductInfoController {
     }
 
     @RequestMapping(value = "/product-info/list/{page}")
-    public String showProductInfoList(Model model, HttpSession session, @ModelAttribute("searchForm") ProductInfoEntity productInfo, @PathVariable("page") int page) {
-        Paging paging = new Paging(5);
-        paging.setIndexPage(page);
-        List<ProductInfoEntity> products = productService.getAllProductInfo(productInfo, paging);
-        if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
-            model.addAttribute(Constant.MSG_SUCCESS, session.getAttribute(Constant.MSG_SUCCESS));
-            session.removeAttribute(Constant.MSG_SUCCESS);
-        }
-        if (session.getAttribute(Constant.MSG_ERROR) != null) {
-            model.addAttribute(Constant.MSG_ERROR, session.getAttribute(Constant.MSG_ERROR));
-            session.removeAttribute(Constant.MSG_ERROR);
-        }
-        model.addAttribute("pageInfo", paging);
-        model.addAttribute("products", products);
-        return "productInfo-list";
-
+    public ResponseEntity<?> showProductInfoList(HttpSession session, @ModelAttribute("searchForm") ProductInfoEntity productInfo, @PathVariable("page") int page) {
+            Paging paging = new Paging(5);
+            paging.setIndexPage(page);
+            List<ProductInfoEntity> products = productService.getAllProductInfo(productInfo, paging);
+            if (session.getAttribute(Constant.MSG_SUCCESS) != null ) {
+                session.removeAttribute(Constant.MSG_SUCCESS);
+            }
+            if (session.getAttribute(Constant.MSG_ERROR) != null) {
+                session.removeAttribute(Constant.MSG_ERROR);
+            }
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/product-info/add")
     public String add(Model model) {
         model.addAttribute("titlePage", "Add ProductInfo");
         model.addAttribute("modelForm", new ProductInfoEntity());
-        List<CategoryEntity> categories = productService.getAllCategory(null, null);
+        List<CategoryEntity> categories = categoryService.getAllCategory(null, null);
         Map<String, String> mapCategory = new HashMap<>();
         for (CategoryEntity category : categories) {
             mapCategory.put(String.valueOf(category.getId()), category.getName());
@@ -87,12 +90,12 @@ public class ProductInfoController {
         log.info("Edit productInfo with id=" + id);
         ProductInfoEntity productInfo = productService.findByIdProductInfo(id);
         if (productInfo != null) {
-            List<CategoryEntity> categories = productService.getAllCategory(null, null);
+            List<CategoryEntity> categories = categoryService.getAllCategory(null, null);
             Map<String, String> mapCategory = new HashMap<>();
             for (CategoryEntity category : categories) {
                 mapCategory.put(String.valueOf(category.getId()), category.getName());
             }
-//            productInfo.setCategory(productInfo.getCategory().getId());
+            productInfo.setCategories(productInfo.getCategories());
             model.addAttribute("mapCategory", mapCategory);
             model.addAttribute("titlePage", "Edit ProductInfo");
             model.addAttribute("modelForm", productInfo);
@@ -103,16 +106,13 @@ public class ProductInfoController {
     }
 
     @GetMapping("/product-info/view/{id}")
-    public String view(Model model, @PathVariable("id") int id) {
+    public ResponseEntity<?> view(@PathVariable("id") int id) {
         log.info("View productInfo with id=" + id);
         ProductInfoEntity productInfo = productService.findByIdProductInfo(id);
         if (productInfo != null) {
-            model.addAttribute("titlePage", "View ProductInfo");
-            model.addAttribute("modelForm", productInfo);
-            model.addAttribute("viewOnly", true);
-            return "productInfo-action";
+            throw new NotFoundException("khong tim thay");
         }
-        return "redirect:/product-info/list";
+        return ResponseEntity.ok(productInfo);
     }
 
     @PostMapping("/product-info/save")
@@ -123,7 +123,7 @@ public class ProductInfoController {
             } else {
                 model.addAttribute("titlePage", "Add ProductInfo");
             }
-            List<CategoryEntity> categories = productService.getAllCategory(null, null);
+            List<CategoryEntity> categories = categoryService.getAllCategory(null, null);
             Map<String, String> mapCategory = new HashMap<>();
             for (CategoryEntity category : categories) {
                 mapCategory.put(String.valueOf(category.getId()), category.getName());
@@ -135,7 +135,6 @@ public class ProductInfoController {
 
         }
         CategoryEntity category = new CategoryEntity();
-//        category.setId(productInfo.getCateId());
         productInfo.setCategories(category);
         if (productInfo.getId() != null && productInfo.getId() != 0) {
             try {
@@ -143,7 +142,6 @@ public class ProductInfoController {
                 productService.updateProductInfo(productInfo);
                 session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 log.error(e.getMessage());
                 session.setAttribute(Constant.MSG_ERROR, "Update has error");
@@ -164,19 +162,22 @@ public class ProductInfoController {
     }
 
     @GetMapping("/product-info/delete/{id}")
-    public String delete(Model model, @PathVariable("id") int id, HttpSession session) {
-        log.info("Delete productInfo with id=" + id);
-        ProductInfoEntity productInfo = productService.findByIdProductInfo(id);
-        if (productInfo != null) {
-            try {
-                productService.deleteProductInfo(productInfo);
-                session.setAttribute(Constant.MSG_SUCCESS, "Delete success!!!");
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                session.setAttribute(Constant.MSG_ERROR, "Delete has error!!!");
+    public ResponseEntity<?> delete(@PathVariable("id") int id, HttpSession session) {
+        try {
+            log.info("Delete productInfo with id=" + id);
+            ProductInfoEntity productInfo = productService.findByIdProductInfo(id);
+            if (productInfo != null) {
+                try {
+                    productService.deleteProductInfo(productInfo);
+                    session.setAttribute(Constant.MSG_SUCCESS, "Delete success!!!");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    session.setAttribute(Constant.MSG_ERROR, "Delete has error!!!");
+                }
             }
+            return ResponseEntity.ok(session.getAttribute(Constant.MSG_SUCCESS));
+        }catch (Exception e){
+            return ResponseEntity.ok(session.getAttribute(Constant.MSG_ERROR));
         }
-        return "redirect:/product-info/list";
     }
 }

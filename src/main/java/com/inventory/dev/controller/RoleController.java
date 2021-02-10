@@ -2,6 +2,8 @@ package com.inventory.dev.controller;
 
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.RoleEntity;
+import com.inventory.dev.model.dto.RoleDto;
+import com.inventory.dev.model.request.CreateRoleReq;
 import com.inventory.dev.service.RoleService;
 import com.inventory.dev.util.Constant;
 import com.inventory.dev.validate.RoleValidator;
@@ -44,7 +46,6 @@ public class RoleController {
     }
 
     @RequestMapping(value = {"/role/list", "/role/list/"})
-
     public String redirect() {
         return "redirect:/role/list/1";
     }
@@ -54,18 +55,16 @@ public class RoleController {
         Paging paging = new Paging(5);
         paging.setIndexPage(page);
         List<RoleEntity> roles = roleService.getRoleList(role, paging);
-
         return ResponseEntity.ok().body(roles);
-
     }
 
-    @GetMapping("/role/add")
-    public String add(Model model) {
-        model.addAttribute("titlePage", "Add Role");
-        model.addAttribute("modelForm", new RoleEntity());
-        model.addAttribute("viewOnly", false);
-        return "role-action";
-    }
+//    @GetMapping("/role/add")
+//    public String add(Model model) {
+//        model.addAttribute("titlePage", "Add Role");
+//        model.addAttribute("modelForm", new RoleEntity());
+//        model.addAttribute("viewOnly", false);
+//        return "role-action";
+//    }
 
     @GetMapping("/role/edit/{id}")
     public ResponseEntity<?> edit(@PathVariable("id") int id) throws Exception {
@@ -78,7 +77,7 @@ public class RoleController {
     }
 
     @GetMapping("/role/view/{id}")
-    public ResponseEntity<?> view(@PathVariable("id") int id) {
+    public ResponseEntity<?> view(@Valid @PathVariable("id") int id) {
         log.info("View role with id=" + id);
         RoleEntity role = roleService.findByIdRole(id);
         List<Object> obj = new ArrayList<>();
@@ -89,46 +88,35 @@ public class RoleController {
     }
 
     @PostMapping("/role/save")
-    public String save(Model model, @ModelAttribute("modelForm") @Validated RoleEntity role, BindingResult result, HttpSession session) {
-        if (result.hasErrors()) {
-            if (role.getId() != null) {
-                model.addAttribute("titlePage", "Edit Role");
-            } else {
-                model.addAttribute("titlePage", "Add Role");
+    public ResponseEntity<?> save(@RequestBody @Validated RoleEntity role,HttpSession session) {
+        try {
+            if(role.getId()!=null && role.getId()!=0) {
+                try {
+                    roleService.updateRole(role);
+                    session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    log.error(e.getMessage());
+                    session.setAttribute(Constant.MSG_ERROR, "Update has error");
+                }
+            }else {
+                try {
+                    roleService.saveRole(role);
+                    session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    session.setAttribute(Constant.MSG_ERROR, "Insert has error!!!");
+                }
             }
+            return ResponseEntity.ok(role != null ? session.getAttribute(Constant.MSG_SUCCESS) : session.getAttribute(Constant.MSG_ERROR));
 
-            model.addAttribute("modelForm", role);
-            model.addAttribute("viewOnly", false);
-            return "role-action";
-
+        } catch (Exception e){
+            return ResponseEntity.ok(e.getMessage());
         }
-        if (role.getId() != null && role.getId() != 0) {
-            try {
-                roleService.updateRole(role);
-                session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                log.error(e.getMessage());
-                session.setAttribute(Constant.MSG_ERROR, "Update has error");
-            }
-
-        } else {
-            try {
-                roleService.saveRole(role);
-                session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                session.setAttribute(Constant.MSG_ERROR, "Insert has error!!!");
-            }
-        }
-        return "redirect:/role/list";
-
     }
 
     @GetMapping("/role/delete/{id}")
-    public String delete(Model model, @PathVariable("id") long id, HttpSession session) {
+    public ResponseEntity<?> delete(@PathVariable("id") int id, HttpSession session) {
         log.info("Delete role with id=" + id);
         RoleEntity role = roleService.findByIdRole(id);
         if (role != null) {
@@ -136,11 +124,10 @@ public class RoleController {
                 roleService.deleteRole(role);
                 session.setAttribute(Constant.MSG_SUCCESS, "Delete success!!!");
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 session.setAttribute(Constant.MSG_ERROR, "Delete has error!!!");
             }
         }
-        return "redirect:/role/list";
+        return ResponseEntity.ok("Delete success!!!");
     }
 }

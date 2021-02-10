@@ -2,6 +2,7 @@ package com.inventory.dev.service;
 
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.RoleEntity;
+import com.inventory.dev.model.request.CreateRoleReq;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,5 +19,5 @@ public interface RoleService {
 
     public List<RoleEntity> findRole(String property, Object value);
 
-    public RoleEntity findByIdRole(long id);
+    public RoleEntity findByIdRole(int id);
 }

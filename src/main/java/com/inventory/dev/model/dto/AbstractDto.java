@@ -2,6 +2,7 @@ package com.inventory.dev.model.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Setter
@@ -9,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class AbstractDto<T> {
+public class AbstractDto<T> implements Serializable {
     private Integer id;
     private Integer activeFlag;
     private Date createdDate;

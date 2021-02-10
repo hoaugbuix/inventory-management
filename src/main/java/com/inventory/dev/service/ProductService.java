@@ -11,17 +11,7 @@ import java.util.List;
 
 @Service
 public interface ProductService {
-    public void saveCategory(CategoryEntity category) throws Exception;
 
-    public void updateCategory(CategoryEntity category) throws Exception;
-
-    public void deleteCategory(CategoryEntity category) throws Exception;
-
-    public List<CategoryEntity> findCategory(String property, Object value);
-
-    public List<CategoryEntity> getAllCategory(CategoryEntity category, Paging paging);
-
-    public CategoryEntity findByIdCategory(int id);
 
     // PRODUCT INFO
     public void saveProductInfo(ProductInfoEntity productInfo) throws Exception;

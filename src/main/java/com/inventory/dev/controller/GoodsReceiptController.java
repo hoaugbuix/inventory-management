@@ -170,7 +170,6 @@ public class GoodsReceiptController {
         for (ProductInfoEntity productInfo : productInfos) {
             mapProduct.put(productInfo.getId().toString(), productInfo.getName());
         }
-
         return mapProduct;
     }
 }

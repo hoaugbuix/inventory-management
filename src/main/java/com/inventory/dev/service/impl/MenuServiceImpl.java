@@ -6,6 +6,7 @@ import com.inventory.dev.entity.AuthEntity;
 import com.inventory.dev.entity.MenuEntity;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.RoleEntity;
+import com.inventory.dev.model.dto.MenuDto;
 import com.inventory.dev.service.MenuService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class MenuServiceImpl implements MenuService {
     private AuthDAO<AuthEntity> authDAO;
 
     @Override
-    public List<MenuEntity> getListMenu(Paging paging, MenuEntity menu) {
+    public List<MenuEntity> getListMenu(Paging paging, MenuDto menu) {
         log.info("show all menu");
         StringBuilder queryStr = new StringBuilder();
         queryStr.append(" or model.activeFlag=0");

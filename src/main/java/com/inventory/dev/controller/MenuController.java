@@ -1,13 +1,12 @@
 package com.inventory.dev.controller;
 
-import com.inventory.dev.entity.AuthFormEntity;
-import com.inventory.dev.entity.MenuEntity;
-import com.inventory.dev.entity.Paging;
-import com.inventory.dev.entity.RoleEntity;
+import com.inventory.dev.entity.*;
+import com.inventory.dev.model.dto.MenuDto;
 import com.inventory.dev.service.MenuService;
 import com.inventory.dev.service.RoleService;
 import com.inventory.dev.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +27,10 @@ public class MenuController {
     }
 
     @RequestMapping("/menu/list/{page}")
-    public String menuList(Model model, @PathVariable("page") int page, @ModelAttribute("searchForm") MenuEntity menu, HttpSession session) {
+    public String menuList(Model model, @PathVariable("page") int page, MenuDto menu, HttpSession session) {
         Paging paging = new Paging(15);
         paging.setIndexPage(page);
+        MenuEntity mn = new MenuEntity();
         List<MenuEntity> menuList = menuService.getListMenu(paging, menu);
         List<RoleEntity> roles = roleService.getRoleList(null, null);
         Collections.sort(roles, (o1, o2) -> o1.getId() - o2.getId());
@@ -60,16 +60,15 @@ public class MenuController {
     }
 
     @GetMapping("/menu/change-status/{id}")
-    public String change(Model model, @PathVariable("id") int id, HttpSession session) {
+    public ResponseEntity<?> change(Model model, @PathVariable("id") int id, HttpSession session) {
         try {
             menuService.changeStatus(id);
             session.setAttribute(Constant.MSG_SUCCESS, "Change status success!!!");
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             session.setAttribute(Constant.MSG_ERROR, "Change status has error!!!");
         }
-        return "redirect:/menu/list";
+        return ResponseEntity.ok(session.equals(Constant.MSG_SUCCESS) ? Constant.MSG_SUCCESS : Constant.MSG_ERROR);
     }
 
     @GetMapping("/menu/permission")
@@ -85,7 +84,6 @@ public class MenuController {
             menuService.updatePermission(authForm.getRoleId(), authForm.getMenuId(), authForm.getPermission());
             session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             session.setAttribute(Constant.MSG_ERROR, "Update has error!!!");
         }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -20,4 +21,6 @@ public class UserDto extends AbstractDto<UserEntity> {
     private String username;
     private String password;
     private Set<String> roles;
+    private Set userRoles = new HashSet(0);
+    private Integer roleID;
 }

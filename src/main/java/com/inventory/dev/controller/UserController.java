@@ -74,12 +74,13 @@ public class UserController {
         // Gen token
         UserDetails principal = new CustomUserDetails(result);
         String token = jwtTokenUtil.generateToken(principal);
-
+        System.out.printf("toke" + token);
 //         Add token to cookie to login
         Cookie cookie = new Cookie("JWT_TOKEN", token);
         cookie.setMaxAge(MAX_AGE_COOKIE);
         cookie.setPath("/");
         response.addCookie(cookie);
+        System.out.printf("cookie" + cookie);
         try {
             return ResponseEntity.ok(UserMapper.toUserDto(result));
         } catch (Exception e) {
