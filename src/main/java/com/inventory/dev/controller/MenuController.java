@@ -1,7 +1,6 @@
 package com.inventory.dev.controller;
 
 import com.inventory.dev.entity.*;
-import com.inventory.dev.model.dto.MenuDto;
 import com.inventory.dev.service.MenuService;
 import com.inventory.dev.service.RoleService;
 import com.inventory.dev.util.Constant;
@@ -27,10 +26,9 @@ public class MenuController {
     }
 
     @RequestMapping("/menu/list/{page}")
-    public String menuList(Model model, @PathVariable("page") int page, MenuDto menu, HttpSession session) {
+    public ResponseEntity<?> menuList(@PathVariable("page") int page, MenuEntity menu, HttpSession session) {
         Paging paging = new Paging(15);
         paging.setIndexPage(page);
-        MenuEntity mn = new MenuEntity();
         List<MenuEntity> menuList = menuService.getListMenu(paging, menu);
         List<RoleEntity> roles = roleService.getRoleList(null, null);
         Collections.sort(roles, (o1, o2) -> o1.getId() - o2.getId());
@@ -41,22 +39,20 @@ public class MenuController {
             }
 //            for (Object obj : item.getAuths()) {
 //                AuthEntity auth = (AuthEntity) obj;
-//                mapAuth.put(auth.getRole().getId(), auth.getPermission());
+//                mapAuth.put(auth.getRoles().getId(), auth.getPermission());
 //            }
 //            item.setMapAuth(mapAuth);
         }
         if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
-            model.addAttribute(Constant.MSG_SUCCESS, session.getAttribute(Constant.MSG_SUCCESS));
             session.removeAttribute(Constant.MSG_SUCCESS);
         }
         if (session.getAttribute(Constant.MSG_ERROR) != null) {
-            model.addAttribute(Constant.MSG_ERROR, session.getAttribute(Constant.MSG_ERROR));
             session.removeAttribute(Constant.MSG_ERROR);
         }
-        model.addAttribute("menuList", menuList);
-        model.addAttribute("roles", roles);
-        model.addAttribute("pageInfo", paging);
-        return "menu-list";
+//        model.addAttribute("menuList", menuList);
+//        model.addAttribute("roles", roles);
+//        model.addAttribute("pageInfo", paging);
+        return ResponseEntity.ok(menuList);
     }
 
     @GetMapping("/menu/change-status/{id}")
@@ -79,7 +75,7 @@ public class MenuController {
     }
 
     @PostMapping("/menu/update-permission")
-    public String updatePermission(Model model, HttpSession session, @ModelAttribute("modelForm") AuthFormEntity authForm) {
+    public ResponseEntity<?> updatePermission(Model model, HttpSession session, @ModelAttribute("modelForm") AuthFormEntity authForm) {
         try {
             menuService.updatePermission(authForm.getRoleId(), authForm.getMenuId(), authForm.getPermission());
             session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
@@ -87,7 +83,7 @@ public class MenuController {
             e.printStackTrace();
             session.setAttribute(Constant.MSG_ERROR, "Update has error!!!");
         }
-        return "redirect:/menu/list";
+        return ResponseEntity.ok(Constant.MSG_SUCCESS);
     }
 
     private void initSelectbox(Model model) {

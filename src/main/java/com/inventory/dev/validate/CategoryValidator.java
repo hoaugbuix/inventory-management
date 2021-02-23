@@ -2,7 +2,6 @@ package com.inventory.dev.validate;
 
 import com.inventory.dev.entity.CategoryEntity;
 import com.inventory.dev.service.CategoryService;
-import com.inventory.dev.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

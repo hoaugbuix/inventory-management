@@ -16,7 +16,7 @@ public class DevApplication {
         SpringApplication.run(DevApplication.class, args);
     }
 
-    public static void sendSMS (String otpStr) {
+    public static void sendSMS(String otpStr) {
         try {
 
             String apiKey = "apiKey=" + "";
@@ -38,7 +38,7 @@ public class DevApplication {
             String line = "";
             StringBuilder sb = new StringBuilder();
 
-            while ( (line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 sb.append(line).append("\n");
             }
 

@@ -3,7 +3,6 @@ package com.inventory.dev.controller;
 import com.inventory.dev.entity.CategoryEntity;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.service.CategoryService;
-import com.inventory.dev.service.ProductService;
 import com.inventory.dev.util.Constant;
 import com.inventory.dev.validate.CategoryValidator;
 import org.apache.log4j.Logger;
@@ -12,15 +11,16 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 public class CategoryController {
@@ -48,21 +48,17 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/category/list/{page}")
-    public String showCategoryList(Model model, HttpSession session, @ModelAttribute("searchForm") CategoryEntity category, @PathVariable("page") int page) {
+    public ResponseEntity<?> showCategoryList(HttpSession session, CategoryEntity category, @PathVariable("page") int page) {
         Paging paging = new Paging(1);
         paging.setIndexPage(page);
         List<CategoryEntity> categories = categoryService.getAllCategory(category, paging);
         if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
-            model.addAttribute(Constant.MSG_SUCCESS, session.getAttribute(Constant.MSG_SUCCESS));
             session.removeAttribute(Constant.MSG_SUCCESS);
         }
         if (session.getAttribute(Constant.MSG_ERROR) != null) {
-            model.addAttribute(Constant.MSG_ERROR, session.getAttribute(Constant.MSG_ERROR));
             session.removeAttribute(Constant.MSG_ERROR);
         }
-        model.addAttribute("pageInfo", paging);
-        model.addAttribute("categories", categories);
-        return "category-list";
+        return ResponseEntity.ok(categories);
 
     }
 
@@ -75,16 +71,13 @@ public class CategoryController {
     }
 
     @GetMapping("/category/edit/{id}")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public ResponseEntity<?> edit(@PathVariable("id") int id) throws Exception {
         log.info("Edit category with id=" + id);
         CategoryEntity category = categoryService.findByIdCategory(id);
         if (category != null) {
-            model.addAttribute("titlePage", "Edit Category");
-            model.addAttribute("modelForm", category);
-            model.addAttribute("viewOnly", false);
-            return "category-action";
+            categoryService.updateCategory(category);
         }
-        return "redirect:/category/list";
+        return ResponseEntity.ok(category);
     }
 
     @GetMapping("/category/view/{id}")
@@ -99,46 +92,31 @@ public class CategoryController {
     }
 
     @PostMapping("/category/save")
-    public String save(Model model, @ModelAttribute("modelForm") @Validated CategoryEntity category, BindingResult result, HttpSession session) {
-        if (result.hasErrors()) {
-            if (category.getId() != null) {
-                model.addAttribute("titlePage", "Edit Category");
-            } else {
-                model.addAttribute("titlePage", "Add Category");
-            }
-
-            model.addAttribute("modelForm", category);
-            model.addAttribute("viewOnly", false);
-            return "category-action";
-
-        }
+    public ResponseEntity<?> save(@RequestBody @Valid CategoryEntity category, HttpSession session) {
         if (category.getId() != null && category.getId() != 0) {
             try {
                 categoryService.updateCategory(category);
                 session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 log.error(e.getMessage());
                 session.setAttribute(Constant.MSG_ERROR, "Update has error");
             }
-
         } else {
             try {
                 categoryService.saveCategory(category);
                 session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 session.setAttribute(Constant.MSG_ERROR, "Insert has error!!!");
             }
         }
-        return "redirect:/category/list";
+        return ResponseEntity.ok(session.getAttribute(Constant.MSG_SUCCESS));
 
     }
 
     @GetMapping("/category/delete/{id}")
-    public String delete(Model model, @PathVariable("id") int id, HttpSession session) {
+    public ResponseEntity<?> delete(@PathVariable("id") int id, HttpSession session) {
         log.info("Delete category with id=" + id);
         CategoryEntity category = categoryService.findByIdCategory(id);
         if (category != null) {
@@ -146,11 +124,10 @@ public class CategoryController {
                 categoryService.deleteCategory(category);
                 session.setAttribute(Constant.MSG_SUCCESS, "Delete success!!!");
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 session.setAttribute(Constant.MSG_ERROR, "Delete has error!!!");
             }
         }
-        return "redirect:/category/list";
+        return ResponseEntity.ok(session.getAttribute(Constant.MSG_SUCCESS));
     }
 }

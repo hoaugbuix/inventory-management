@@ -78,7 +78,7 @@ public class LoginController {
             cookie.setPath("/");
             response.addCookie(cookie);
 
-            return ResponseEntity.ok(UserMapper.toUserDto(((CustomUserDetails)  authentication.getPrincipal()).getUser()));
+            return ResponseEntity.ok(UserMapper.toUserDto(((CustomUserDetails) authentication.getPrincipal()).getUser()));
         } catch (Exception ex) {
             throw new BadRequestException("Email hoặc mật khẩu không chính xác");
         }

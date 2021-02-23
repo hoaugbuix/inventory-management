@@ -1,6 +1,5 @@
 package com.inventory.dev.service;
 
-import com.inventory.dev.entity.CategoryEntity;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.ProductInfoEntity;
 import org.springframework.stereotype.Service;

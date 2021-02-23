@@ -27,7 +27,7 @@ public class TwilioSmsSender implements SmsSender {
             String message = smsRequest.getMessage();
             MessageCreator creator = Message.creator(to, from, message);
             creator.create();
-            LOGGER.info("Send sms {}"+ smsRequest);
+            LOGGER.info("Send sms {}" + smsRequest);
         } else {
             throw new IllegalArgumentException(
                     "Phone number [" + smsRequest.getPhoneNumber() + "] is not a valid number"

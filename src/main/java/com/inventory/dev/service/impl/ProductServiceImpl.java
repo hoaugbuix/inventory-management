@@ -1,8 +1,6 @@
 package com.inventory.dev.service.impl;
 
-import com.inventory.dev.dao.CategoryDAO;
 import com.inventory.dev.dao.ProductInfoDAO;
-import com.inventory.dev.entity.CategoryEntity;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.ProductInfoEntity;
 import com.inventory.dev.service.ProductService;

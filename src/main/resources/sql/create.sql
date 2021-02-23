@@ -64,7 +64,6 @@ CREATE TABLE menu
     active_flag  INTEGER      NOT NULL DEFAULT 1,
     created_date TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    auth_id      INTEGER      NOT NULL,
     PRIMARY KEY (id)
 );
 

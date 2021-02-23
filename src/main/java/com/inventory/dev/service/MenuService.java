@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface MenuService {
-    public List<MenuEntity> getListMenu(Paging paging, MenuDto menu);
+    public List<MenuEntity> getListMenu(Paging paging, MenuEntity menu);
 
     public void changeStatus(Integer id) throws Exception;
 

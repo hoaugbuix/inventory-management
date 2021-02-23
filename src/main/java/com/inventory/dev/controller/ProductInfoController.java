@@ -3,7 +3,6 @@ package com.inventory.dev.controller;
 import com.inventory.dev.entity.CategoryEntity;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.ProductInfoEntity;
-import com.inventory.dev.exception.BadRequestException;
 import com.inventory.dev.exception.NotFoundException;
 import com.inventory.dev.service.CategoryService;
 import com.inventory.dev.service.ProductService;
@@ -58,15 +57,15 @@ public class ProductInfoController {
 
     @RequestMapping(value = "/product-info/list/{page}")
     public ResponseEntity<?> showProductInfoList(HttpSession session, @ModelAttribute("searchForm") ProductInfoEntity productInfo, @PathVariable("page") int page) {
-            Paging paging = new Paging(5);
-            paging.setIndexPage(page);
-            List<ProductInfoEntity> products = productService.getAllProductInfo(productInfo, paging);
-            if (session.getAttribute(Constant.MSG_SUCCESS) != null ) {
-                session.removeAttribute(Constant.MSG_SUCCESS);
-            }
-            if (session.getAttribute(Constant.MSG_ERROR) != null) {
-                session.removeAttribute(Constant.MSG_ERROR);
-            }
+        Paging paging = new Paging(5);
+        paging.setIndexPage(page);
+        List<ProductInfoEntity> products = productService.getAllProductInfo(productInfo, paging);
+        if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
+            session.removeAttribute(Constant.MSG_SUCCESS);
+        }
+        if (session.getAttribute(Constant.MSG_ERROR) != null) {
+            session.removeAttribute(Constant.MSG_ERROR);
+        }
         return ResponseEntity.ok(products);
     }
 
@@ -176,7 +175,7 @@ public class ProductInfoController {
                 }
             }
             return ResponseEntity.ok(session.getAttribute(Constant.MSG_SUCCESS));
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.ok(session.getAttribute(Constant.MSG_ERROR));
         }
     }

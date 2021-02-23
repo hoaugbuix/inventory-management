@@ -4,11 +4,7 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 @Setter
 @Getter
@@ -29,5 +25,4 @@ public class MenuEntity extends BaseEntity {
 
     @Column(name = "order_index")
     private Integer orderIndex;
-
 }

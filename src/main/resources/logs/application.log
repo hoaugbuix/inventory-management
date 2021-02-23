@@ -134,3 +134,94 @@
 2021-02-09 23:46:33 INFO  BaseDAOImpl:62 - Find by property
 2021-02-09 23:46:33 INFO  BaseDAOImpl:65 -  query find by property ===> from com.inventory.dev.entity.CategoryEntity as model where model.activeFlag=1 and model.code=?
 2021-02-09 23:47:25 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-20 15:37:33 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-20 15:42:39 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextorg.springframework.web.util.NestedServletException: Request processing failed; nested exception is com.twilio.exception.ApiException: Authenticate
+2021-02-20 15:43:55 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextorg.springframework.web.util.NestedServletException: Request processing failed; nested exception is com.twilio.exception.ApiException: Authenticate
+2021-02-20 15:44:03 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextorg.springframework.web.util.NestedServletException: Request processing failed; nested exception is com.twilio.exception.ApiException: Authenticate
+2021-02-20 15:44:27 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextorg.springframework.web.util.NestedServletException: Request processing failed; nested exception is com.twilio.exception.ApiException: Authenticate
+2021-02-20 15:44:39 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextorg.springframework.web.util.NestedServletException: Request processing failed; nested exception is com.twilio.exception.ApiException: Authenticate
+2021-02-20 15:44:56 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextorg.springframework.web.util.NestedServletException: Request processing failed; nested exception is com.twilio.exception.ApiException: Authenticate
+2021-02-20 15:45:36 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-20 15:45:44 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextorg.springframework.web.util.NestedServletException: Request processing failed; nested exception is com.twilio.exception.ApiException: Authenticate
+2021-02-20 15:45:59 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextorg.springframework.web.util.NestedServletException: Request processing failed; nested exception is com.twilio.exception.ApiException: Authenticate
+2021-02-20 15:46:16 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextorg.springframework.web.util.NestedServletException: Request processing failed; nested exception is com.twilio.exception.ApiException: Authenticate
+2021-02-20 15:51:40 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-20 15:51:50 INFO  TwilioSmsSender:30 - Send sms {}SmsRequest{phoneNumber= ...', message='sddss'}
+2021-02-21 07:45:38 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-21 07:46:18 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-21 07:47:18 INFO  TwilioSmsSender:30 - Send sms {}SmsRequest{phoneNumber= ...', message='sddss'}
+2021-02-21 13:36:16 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-21 13:38:35 INFO  MenuServiceImpl:31 - show all menu
+2021-02-21 13:38:35 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:38:35 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2021-02-21 13:38:35 INFO  RoleServiceImpl:27 - getRoleList{}
+2021-02-21 13:38:35 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:38:35 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2021-02-21 13:38:53 INFO  MenuServiceImpl:31 - show all menu
+2021-02-21 13:38:53 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:38:53 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2021-02-21 13:38:53 INFO  RoleServiceImpl:27 - getRoleList{}
+2021-02-21 13:38:53 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:38:53 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2021-02-21 13:40:02 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-21 13:41:08 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-21 13:41:16 INFO  MenuServiceImpl:31 - show all menu
+2021-02-21 13:41:16 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:41:16 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2021-02-21 13:41:16 INFO  RoleServiceImpl:27 - getRoleList{}
+2021-02-21 13:41:16 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:41:16 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2021-02-21 13:41:19 INFO  MenuServiceImpl:31 - show all menu
+2021-02-21 13:41:19 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:41:19 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2021-02-21 13:41:19 INFO  RoleServiceImpl:27 - getRoleList{}
+2021-02-21 13:41:19 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:41:19 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2021-02-21 13:42:25 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-21 13:43:19 INFO  MenuServiceImpl:31 - show all menu
+2021-02-21 13:43:19 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:43:19 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2021-02-21 13:43:19 INFO  RoleServiceImpl:27 - getRoleList{}
+2021-02-21 13:43:19 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:43:19 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2021-02-21 13:43:50 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-21 13:43:56 INFO  MenuServiceImpl:31 - show all menu
+2021-02-21 13:43:56 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:43:56 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2021-02-21 13:43:56 INFO  RoleServiceImpl:27 - getRoleList{}
+2021-02-21 13:43:56 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:43:56 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2021-02-21 13:44:46 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-21 13:46:57 INFO  MenuServiceImpl:31 - show all menu
+2021-02-21 13:46:57 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:46:57 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2021-02-21 13:46:57 INFO  RoleServiceImpl:27 - getRoleList{}
+2021-02-21 13:46:57 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:46:57 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2021-02-21 13:47:54 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-21 13:47:58 INFO  MenuServiceImpl:31 - show all menu
+2021-02-21 13:47:58 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:47:58 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2021-02-21 13:47:58 INFO  RoleServiceImpl:27 - getRoleList{}
+2021-02-21 13:47:58 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:47:58 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2021-02-21 13:48:08 INFO  MenuServiceImpl:31 - show all menu
+2021-02-21 13:48:08 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:48:08 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2021-02-21 13:48:08 INFO  RoleServiceImpl:27 - getRoleList{}
+2021-02-21 13:48:08 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:48:08 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2021-02-21 13:48:13 INFO  MenuServiceImpl:31 - show all menu
+2021-02-21 13:48:13 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:48:13 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2021-02-21 13:48:13 INFO  RoleServiceImpl:27 - getRoleList{}
+2021-02-21 13:48:13 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:48:13 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2021-02-21 13:48:15 INFO  MenuServiceImpl:31 - show all menu
+2021-02-21 13:48:15 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:48:15 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2021-02-21 13:48:15 INFO  RoleServiceImpl:27 - getRoleList{}
+2021-02-21 13:48:15 INFO  BaseDAOImpl:27 - find all record from db
+2021-02-21 13:48:15 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2021-02-21 13:53:49 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2021-02-23 15:38:41 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef

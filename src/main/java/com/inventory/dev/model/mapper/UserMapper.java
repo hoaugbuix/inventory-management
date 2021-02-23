@@ -4,9 +4,7 @@ import com.inventory.dev.entity.RoleEntity;
 import com.inventory.dev.entity.UserEntity;
 import com.inventory.dev.model.dto.UserDto;
 import com.inventory.dev.model.request.CreateUserReq;
-import com.inventory.dev.util.HashingPassword;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
 import java.util.HashSet;

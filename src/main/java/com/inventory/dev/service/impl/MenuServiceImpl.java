@@ -27,7 +27,7 @@ public class MenuServiceImpl implements MenuService {
     private AuthDAO<AuthEntity> authDAO;
 
     @Override
-    public List<MenuEntity> getListMenu(Paging paging, MenuDto menu) {
+    public List<MenuEntity> getListMenu(Paging paging, MenuEntity menu) {
         log.info("show all menu");
         StringBuilder queryStr = new StringBuilder();
         queryStr.append(" or model.activeFlag=0");

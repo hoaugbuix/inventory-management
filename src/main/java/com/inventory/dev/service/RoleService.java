@@ -2,7 +2,6 @@ package com.inventory.dev.service;
 
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.RoleEntity;
-import com.inventory.dev.model.request.CreateRoleReq;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

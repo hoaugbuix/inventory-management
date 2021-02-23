@@ -2,8 +2,6 @@ package com.inventory.dev.controller;
 
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.RoleEntity;
-import com.inventory.dev.model.dto.RoleDto;
-import com.inventory.dev.model.request.CreateRoleReq;
 import com.inventory.dev.service.RoleService;
 import com.inventory.dev.util.Constant;
 import com.inventory.dev.validate.RoleValidator;
@@ -12,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -88,9 +84,9 @@ public class RoleController {
     }
 
     @PostMapping("/role/save")
-    public ResponseEntity<?> save(@RequestBody @Validated RoleEntity role,HttpSession session) {
+    public ResponseEntity<?> save(@RequestBody @Validated RoleEntity role, HttpSession session) {
         try {
-            if(role.getId()!=null && role.getId()!=0) {
+            if (role.getId() != null && role.getId() != 0) {
                 try {
                     roleService.updateRole(role);
                     session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
@@ -99,7 +95,7 @@ public class RoleController {
                     log.error(e.getMessage());
                     session.setAttribute(Constant.MSG_ERROR, "Update has error");
                 }
-            }else {
+            } else {
                 try {
                     roleService.saveRole(role);
                     session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
@@ -110,7 +106,7 @@ public class RoleController {
             }
             return ResponseEntity.ok(role != null ? session.getAttribute(Constant.MSG_SUCCESS) : session.getAttribute(Constant.MSG_ERROR));
 
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.ok(e.getMessage());
         }
     }
