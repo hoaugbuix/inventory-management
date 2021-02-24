@@ -5,11 +5,13 @@ import com.inventory.dev.entity.UserEntity;
 import com.inventory.dev.model.dto.UserDto;
 import com.inventory.dev.model.request.CreateUserReq;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@Component
 public class UserMapper {
     public static UserEntity toUserEntity(CreateUserReq req) {
         UserEntity user = new UserEntity();
@@ -23,7 +25,7 @@ public class UserMapper {
         user.setPassword(hash);
         user.setActiveFlag(1);
         user.setCreatedDate(new Date(System.currentTimeMillis()));
-        user.setUpdatedDate(new Date(System.currentTimeMillis()));
+
         //set role
 //        ArrayList<RoleEntity> roles = new ArrayList<>();
 //        for (String roleName: req.getRoles()){

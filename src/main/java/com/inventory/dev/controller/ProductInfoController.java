@@ -20,6 +20,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -85,7 +86,7 @@ public class ProductInfoController {
     }
 
     @GetMapping("/product-info/edit/{id}")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public ResponseEntity<?> edit( @PathVariable("id") int id) {
         log.info("Edit productInfo with id=" + id);
         ProductInfoEntity productInfo = productService.findByIdProductInfo(id);
         if (productInfo != null) {
@@ -95,13 +96,8 @@ public class ProductInfoController {
                 mapCategory.put(String.valueOf(category.getId()), category.getName());
             }
             productInfo.setCategories(productInfo.getCategories());
-            model.addAttribute("mapCategory", mapCategory);
-            model.addAttribute("titlePage", "Edit ProductInfo");
-            model.addAttribute("modelForm", productInfo);
-            model.addAttribute("viewOnly", false);
-            return "productInfo-action";
         }
-        return "redirect:/product-info/list";
+        return ResponseEntity.ok(productInfo);
     }
 
     @GetMapping("/product-info/view/{id}")
@@ -115,29 +111,18 @@ public class ProductInfoController {
     }
 
     @PostMapping("/product-info/save")
-    public String save(Model model, @ModelAttribute("modelForm") @Validated ProductInfoEntity productInfo, BindingResult result, HttpSession session) {
-        if (result.hasErrors()) {
-            if (productInfo.getId() != null) {
-                model.addAttribute("titlePage", "Edit ProductInfo");
-            } else {
-                model.addAttribute("titlePage", "Add ProductInfo");
-            }
+    public ResponseEntity<?> save(@RequestBody @Valid ProductInfoEntity productInfo, HttpSession session) {
+        if (productInfo.getId() != null) {
             List<CategoryEntity> categories = categoryService.getAllCategory(null, null);
             Map<String, String> mapCategory = new HashMap<>();
             for (CategoryEntity category : categories) {
                 mapCategory.put(String.valueOf(category.getId()), category.getName());
             }
-            model.addAttribute("mapCategory", mapCategory);
-            model.addAttribute("modelForm", productInfo);
-            model.addAttribute("viewOnly", false);
-            return "productInfo-action";
-
         }
         CategoryEntity category = new CategoryEntity();
         productInfo.setCategories(category);
         if (productInfo.getId() != null && productInfo.getId() != 0) {
             try {
-
                 productService.updateProductInfo(productInfo);
                 session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
             } catch (Exception e) {
@@ -145,19 +130,16 @@ public class ProductInfoController {
                 log.error(e.getMessage());
                 session.setAttribute(Constant.MSG_ERROR, "Update has error");
             }
-
         } else {
             try {
                 productService.saveProductInfo(productInfo);
                 session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 session.setAttribute(Constant.MSG_ERROR, "Insert has error!!!");
             }
         }
-        return "redirect:/product-info/list";
-
+        return ResponseEntity.ok(session.getAttribute(Constant.MSG_SUCCESS));
     }
 
     @GetMapping("/product-info/delete/{id}")

@@ -93,7 +93,8 @@ public class CategoryController {
 
     @PostMapping("/category/save")
     public ResponseEntity<?> save(@RequestBody @Valid CategoryEntity category, HttpSession session) {
-        if (category.getId() != null && category.getId() != 0) {
+//        CategoryEntity cate = (CategoryEntity) categoryService.findCategory(category.getName(),category);
+        if (category == null) {
             try {
                 categoryService.updateCategory(category);
                 session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");

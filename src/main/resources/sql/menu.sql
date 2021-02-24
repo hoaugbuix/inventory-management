@@ -1,5 +1,4 @@
-use
-inventory_management;
+use inventory_management;
 
 insert into menu(parent_id, url, name, order_index)
 values (0, '/product', 'Sáº£n pháº©m', 1),

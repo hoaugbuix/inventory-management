@@ -6,6 +6,7 @@ import com.inventory.dev.service.HistoryService;
 import com.inventory.dev.util.Constant;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,7 @@ public class HistoryController {
     }
 
     @RequestMapping(value = "/history/list/{page}")
-    public String list(Model model, @ModelAttribute("searchForm") HistoryEntity history, @PathVariable("page") int page) {
+    public ResponseEntity<?> list( HistoryEntity history, @PathVariable("page") int page) {
         Paging paging = new Paging(5);
         paging.setIndexPage(page);
         List<HistoryEntity> histories = historyService.getAll(history, paging);
@@ -37,9 +38,9 @@ public class HistoryController {
         mapType.put(String.valueOf(Constant.TYPE_ALL), "All");
         mapType.put(String.valueOf(Constant.TYPE_GOODS_RECEIPT), "Goods Receipt");
         mapType.put(String.valueOf(Constant.TYPE_GOODS_ISSUES), "Goods Issues");
-        model.addAttribute("histories", histories);
-        model.addAttribute("pageInfo", paging);
-        model.addAttribute("mapType", mapType);
-        return "history";
+//        model.addAttribute("histories", histories);
+//        model.addAttribute("pageInfo", paging);
+//        model.addAttribute("mapType", mapType);
+        return ResponseEntity.ok(histories);
     }
 }

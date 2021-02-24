@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Table(name = "menu")
 public class MenuEntity extends BaseEntity {
     @Column(name = "parent_id")
-    private Integer parentId;
+    private int parentId;
 
     @Column(name = "url")
     private String url;
@@ -24,5 +24,5 @@ public class MenuEntity extends BaseEntity {
     private String name;
 
     @Column(name = "order_index")
-    private Integer orderIndex;
+    private int orderIndex;
 }

@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "product_in_stock")
 public class ProductInStockEntity extends BaseEntity {
     @Column(name = "qty")
-    private Integer qty;
+    private int qty;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

@@ -17,10 +17,10 @@ public class HistoryEntity extends BaseEntity {
     private String actionName;
 
     @Column(name = "type")
-    private Integer type;
+    private int type;
 
     @Column(name = "qty")
-    private Integer qty;
+    private int qty;
 
     @Column(name = "price")
     private BigDecimal price;

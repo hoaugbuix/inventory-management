@@ -31,8 +31,8 @@ public class ProductServiceImpl implements ProductService {
     public void saveProductInfo(ProductInfoEntity productInfo) throws Exception {
         log.info("Insert productInfo " + productInfo.toString());
         productInfo.setActiveFlag(1);
-        productInfo.setCreatedDate(new Date());
-        productInfo.setUpdatedDate(new Date());
+        productInfo.setCreatedDate(new Date(System.currentTimeMillis()));
+        productInfo.setUpdatedDate(new Date(System.currentTimeMillis()));
 //        String fileName = System.currentTimeMillis()+"_"+productInfo.getMultipartFile().getOriginalFilename();
 //        processUploadFile(productInfo.getMultipartFile(),fileName);
 //        productInfo.setImgUrl("/upload/"+fileName);

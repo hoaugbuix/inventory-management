@@ -61,7 +61,7 @@ public class BaseDAOImpl<E> implements BaseDAO<E> {
     public List<E> findByProperty(String property, Object value) {
         log.info("Find by property");
         StringBuilder queryString = new StringBuilder();
-        queryString.append(" from ").append(getGenericName()).append(" as model where model.activeFlag=1 and model.").append(property).append("=?");
+        queryString.append(" from ").append(getGenericName()).append(" as model where model.activeFlag=1 and model.").append(property).append("=?0");
         log.info(" query find by property ===>" + queryString.toString());
         Query<E> query = (Query<E>) entityManager.createQuery(queryString.toString());
         query.setParameter(0, value);

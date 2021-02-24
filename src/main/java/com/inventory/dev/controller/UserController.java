@@ -3,6 +3,7 @@ package com.inventory.dev.controller;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.RoleEntity;
 import com.inventory.dev.entity.UserEntity;
+import com.inventory.dev.exception.NotFoundException;
 import com.inventory.dev.model.mapper.UserMapper;
 import com.inventory.dev.model.request.CreateUserReq;
 import com.inventory.dev.security.CustomUserDetails;
@@ -29,10 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -74,13 +72,11 @@ public class UserController {
         // Gen token
         UserDetails principal = new CustomUserDetails(result);
         String token = jwtTokenUtil.generateToken(principal);
-        System.out.printf("toke" + token);
 //         Add token to cookie to login
         Cookie cookie = new Cookie("JWT_TOKEN", token);
         cookie.setMaxAge(MAX_AGE_COOKIE);
         cookie.setPath("/");
         response.addCookie(cookie);
-        System.out.printf("cookie" + cookie);
         try {
             return ResponseEntity.ok(UserMapper.toUserDto(result));
         } catch (Exception e) {
@@ -90,29 +86,16 @@ public class UserController {
     }
 
 
-    @GetMapping(value = {"/user/list", "/user/list/"})
-    public String redirect() {
-        return "redirect:/user/list/1";
-    }
 
     @GetMapping(value = "/user/list/{page}")
-    public ResponseEntity<?> showUsersList(Model model, HttpSession session, UserEntity user, @PathVariable("page") int page) {
+    public ResponseEntity<?> showUsersList(UserEntity user,@PathVariable("page") int page) {
         Paging paging = new Paging(5);
         paging.setIndexPage(page);
         List<UserEntity> users = userService.getUsersList(user, paging);
-        if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
-            model.addAttribute(Constant.MSG_SUCCESS, session.getAttribute(Constant.MSG_SUCCESS));
-            session.removeAttribute(Constant.MSG_SUCCESS);
+        if (users == null) {
+            throw new NotFoundException("Khong tim thay");
         }
-        if (session.getAttribute(Constant.MSG_ERROR) != null) {
-            model.addAttribute(Constant.MSG_ERROR, session.getAttribute(Constant.MSG_ERROR));
-            session.removeAttribute(Constant.MSG_ERROR);
-        }
-        model.addAttribute("pageInfo", paging);
-        model.addAttribute("users", users);
-        System.out.println(model.toString());
-        return ResponseEntity.ok().body(model.getAttribute("users"));
-
+        return ResponseEntity.ok(users);
     }
 
     @PostMapping("/user/add")

@@ -1,7 +1,6 @@
 package com.inventory.dev.controller;
 
-import com.inventory.dev.entity.MenuEntity;
-import com.inventory.dev.entity.UserEntity;
+import com.inventory.dev.entity.*;
 import com.inventory.dev.exception.BadRequestException;
 import com.inventory.dev.model.mapper.UserMapper;
 import com.inventory.dev.model.request.LoginReq;
@@ -26,6 +25,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -54,12 +54,6 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("loginForm", new UserEntity());
-        return "login/login";
-    }
-
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginReq req, HttpServletResponse response) {
         // Authenticate
@@ -86,19 +80,16 @@ public class LoginController {
 
 
     @PostMapping("/processLogin")
-    public String processLogin(Model model, @ModelAttribute("loginForm") @Validated UserEntity users, BindingResult result, HttpSession session) {
-        if (result.hasErrors()) {
-            return "login/login";
-        }
+    public ResponseEntity<?> processLogin( @Validated UserEntity users, HttpSession session) {
 
         UserEntity user = userService.findByProperty("userName", users.getUsername()).get(0);
 //        UserRoleEntity userRole =(UserRoleEntity) user.getRoles().iterator().next();
 //        List<MenuEntity> menuList = new ArrayList<>();
-//        RoleEntity role = userRole.getRole();
+//        RoleEntity role = userRole.getRoles();
 //        List<MenuEntity> menuChildList = new ArrayList<>();
 //        for(Object obj : role.getAuths()) {
 //            AuthEntity auth = (AuthEntity) obj;
-//            MenuEntity menu = auth.getMenu();
+//            MenuEntity menu = auth.getMenus();
 //            if(menu.getParentId()==0 && menu.getOrderIndex()!=-1 && menu.getActiveFlag()==1 && auth.getPermission()==1 && auth.getActiveFlag()==1) {
 //                menu.setIdMenu(menu.getUrl().replace("/", "")+"Id");
 //                menuList.add(menu);
@@ -122,20 +113,9 @@ public class LoginController {
 //        }
 //        session.setAttribute(Constant.MENU_SESSION, menuList);
 //        session.setAttribute(Constant.USER_INFO, user);
-        return "redirect:/index";
+        return ResponseEntity.ok("");
     }
 
-    @GetMapping("/access-denied")
-    public String accessDenied() {
-        return "access-denied";
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.removeAttribute(Constant.MENU_SESSION);
-        session.removeAttribute(Constant.USER_INFO);
-        return "redirect:/login";
-    }
 
     private void sortMenu(List<MenuEntity> menus) {
         Collections.sort(menus, new Comparator<MenuEntity>() {

@@ -1,7 +1,6 @@
 -- drop schema inventory_management;
 -- create schema inventory_management;
-use
-inventory_management;
+use inventory_management;
 
 CREATE TABLE user
 (
@@ -70,7 +69,6 @@ CREATE TABLE menu
 CREATE TABLE category
 (
     id           INTEGER      NOT NULL AUTO_INCREMENT,
-    product_id   INTEGER      NOT NULL,
     name         VARCHAR(100) NOT NULL,
     code         VARCHAR(50)  NOT NULL,
     description  TEXT,
@@ -94,7 +92,7 @@ CREATE TABLE product_in_stock
 
 CREATE TABLE product_info
 (
-    id           INTEGER      NOT NULL AUTO_INCREMENT,
+    id           INTEGER   NOT NULL AUTO_INCREMENT,
     code         VARCHAR(50)  NOT NULL,
     name         VARCHAR(100) NOT NULL,
     description  TEXT,

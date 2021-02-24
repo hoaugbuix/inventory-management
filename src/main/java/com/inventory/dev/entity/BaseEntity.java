@@ -25,7 +25,7 @@ public abstract class BaseEntity implements Serializable {
     private Integer id;
 
     @Column(name = "active_flag", columnDefinition = "Integer default 1")
-    private Integer activeFlag;
+    private int activeFlag;
 
     @Column(name = "created_date", nullable = true)
     @CreatedDate
