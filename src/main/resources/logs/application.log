@@ -690,3 +690,4 @@
 2021-02-24 16:50:07 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
 2021-02-24 16:50:16 INFO  BaseDAOImpl:27 - find all record from db
 2021-02-24 16:50:16 INFO  BaseDAOImpl:50 - Query find all ====> from com.inventory.dev.entity.UserEntity as model where model.activeFlag=1
+2021-03-02 13:15:30 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
