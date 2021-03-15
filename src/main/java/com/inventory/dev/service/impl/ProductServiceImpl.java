@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,33 +32,30 @@ public class ProductServiceImpl implements ProductService {
     public void saveProductInfo(ProductInfoEntity productInfo) throws Exception {
         log.info("Insert productInfo " + productInfo.toString());
         productInfo.setActiveFlag(1);
-        productInfo.setCreatedDate(new Date(System.currentTimeMillis()));
-        productInfo.setUpdatedDate(new Date(System.currentTimeMillis()));
-//        String fileName = System.currentTimeMillis()+"_"+productInfo.getMultipartFile().getOriginalFilename();
-//        processUploadFile(productInfo.getMultipartFile(),fileName);
-//        productInfo.setImgUrl("/upload/"+fileName);
+        productInfo.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+        productInfo.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+        String fileName = System.currentTimeMillis()+"_"+productInfo.getMultipartFile().getOriginalFilename();
+        processUploadFile(productInfo.getMultipartFile(),fileName);
+        productInfo.setImgUrl("/upload/"+fileName);
         productInfoDAO.save(productInfo);
     }
 
     @Override
     public void updateProductInfo(ProductInfoEntity productInfo) throws Exception {
         log.info("Update productInfo " + productInfo.toString());
-
-
-//        if(!productInfo.getMultipartFile().getOriginalFilename().isEmpty()) {
-//
-//            String fileName =  System.currentTimeMillis()+"_"+productInfo.getMultipartFile().getOriginalFilename();
-//            processUploadFile(productInfo.getMultipartFile(),fileName);
-//            productInfo.setImgUrl("/upload/"+fileName);
-//        }
-        productInfo.setUpdatedDate(new Date());
+        if(!productInfo.getMultipartFile().getOriginalFilename().isEmpty()) {
+            String fileName =  System.currentTimeMillis()+"_"+productInfo.getMultipartFile().getOriginalFilename();
+            processUploadFile(productInfo.getMultipartFile(),fileName);
+            productInfo.setImgUrl("/upload/"+fileName);
+        }
+        productInfo.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
         productInfoDAO.update(productInfo);
     }
 
     @Override
     public void deleteProductInfo(ProductInfoEntity productInfo) throws Exception {
         productInfo.setActiveFlag(0);
-        productInfo.setUpdatedDate(new Date());
+        productInfo.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
         log.info("Delete productInfo " + productInfo.toString());
         productInfoDAO.update(productInfo);
     }

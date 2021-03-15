@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,21 +31,21 @@ public class RoleServiceImpl implements RoleService {
     public void saveRole(RoleEntity role) throws Exception {
         log.info("Insert role " + role.toString());
         role.setActiveFlag(1);
-        role.setCreatedDate(new Date());
-        role.setUpdatedDate(new Date());
+        role.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+        role.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
         roleDAO.save(role);
     }
 
     public void updateRole(RoleEntity role) throws Exception {
         log.info("Update role " + role.toString());
-        role.setUpdatedDate(new Date());
+        role.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
         roleDAO.update(role);
     }
 
     @Override
     public void deleteRole(RoleEntity role) throws Exception {
         role.setActiveFlag(0);
-        role.setUpdatedDate(new Date());
+        role.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
         log.info("Delete role " + role.toString());
         roleDAO.update(role);
     }

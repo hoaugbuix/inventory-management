@@ -7,6 +7,7 @@ import com.inventory.dev.model.request.CreateUserReq;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +25,7 @@ public class UserMapper {
         String hash = BCrypt.hashpw(req.getPassword(), BCrypt.gensalt(12));
         user.setPassword(hash);
         user.setActiveFlag(1);
-        user.setCreatedDate(new Date(System.currentTimeMillis()));
+        user.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 
         //set role
 //        ArrayList<RoleEntity> roles = new ArrayList<>();

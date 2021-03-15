@@ -34,6 +34,4 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "updated_date", nullable = true)
     @LastModifiedDate
     private Date updatedDate;
-
-
 }

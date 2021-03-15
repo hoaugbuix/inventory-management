@@ -1,9 +1,11 @@
 package com.inventory.dev.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -29,4 +31,8 @@ public class ProductInfoEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cate_id")
     private CategoryEntity categories;
+
+    @Transient
+    @JsonIgnore
+    private MultipartFile multipartFile;
 }

@@ -105,7 +105,7 @@ public class ProductInfoController {
         log.info("View productInfo with id=" + id);
         ProductInfoEntity productInfo = productService.findByIdProductInfo(id);
         if (productInfo != null) {
-            throw new NotFoundException("khong tim thay");
+            throw new NotFoundException("Not found");
         }
         return ResponseEntity.ok(productInfo);
     }

@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +65,7 @@ public class ProductInStockServiceImpl implements ProductInStockService {
                 if (invoice.getType() == 1) {
 //                    product.setPrice(invoice.getPrice());
                 }
-                product.setUpdatedDate(new Date());
+                product.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                 productInStockDAO.update(product);
 
             } else if (invoice.getType() == 1) {
@@ -74,8 +75,8 @@ public class ProductInStockServiceImpl implements ProductInStockService {
                 productInfo.setId(invoice.getProductInfos().getId());
 //                product.setProductInfo(productInfo);
                 product.setActiveFlag(1);
-                product.setCreatedDate(new Date());
-                product.setUpdatedDate(new Date());
+                product.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                product.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                 product.setQty(invoice.getQty());
 //                product.setPrice(invoice.getPrice());
                 productInStockDAO.save(product);

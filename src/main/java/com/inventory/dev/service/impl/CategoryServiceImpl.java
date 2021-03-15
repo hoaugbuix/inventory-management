@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,22 +26,22 @@ public class CategoryServiceImpl implements CategoryService {
     public void saveCategory(CategoryEntity category) throws Exception {
         log.info("Insert category " + category.toString());
         category.setActiveFlag(1);
-        category.setCreatedDate(new Date(System.currentTimeMillis()));
-        category.setUpdatedDate(new Date(System.currentTimeMillis()));
+        category.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+        category.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
         categoryDAO.save(category);
     }
 
     @Override
     public void updateCategory(CategoryEntity category) throws Exception {
         log.info("Update category " + category.toString());
-        category.setUpdatedDate(new Date(System.currentTimeMillis()));
+        category.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
         categoryDAO.update(category);
     }
 
     @Override
     public void deleteCategory(CategoryEntity category) throws Exception {
         category.setActiveFlag(0);
-        category.setUpdatedDate(new Date(System.currentTimeMillis()));
+        category.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
         log.info("Delete category " + category.toString());
         categoryDAO.update(category);
     }

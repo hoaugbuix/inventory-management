@@ -2,6 +2,7 @@ package com.inventory.dev.controller;
 
 import com.inventory.dev.entity.CategoryEntity;
 import com.inventory.dev.entity.Paging;
+import com.inventory.dev.exception.NotFoundException;
 import com.inventory.dev.service.CategoryService;
 import com.inventory.dev.util.Constant;
 import com.inventory.dev.validate.CategoryValidator;
@@ -10,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -49,7 +50,7 @@ public class CategoryController {
 
     @RequestMapping(value = "/category/list/{page}")
     public ResponseEntity<?> showCategoryList(HttpSession session, CategoryEntity category, @PathVariable("page") int page) {
-        Paging paging = new Paging(1);
+        Paging paging = new Paging(5);
         paging.setIndexPage(page);
         List<CategoryEntity> categories = categoryService.getAllCategory(category, paging);
         if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
@@ -62,20 +63,30 @@ public class CategoryController {
 
     }
 
-    @GetMapping("/category/add")
-    public String add(Model model) {
-        model.addAttribute("titlePage", "Add Category");
-        model.addAttribute("modelForm", new CategoryEntity());
-        model.addAttribute("viewOnly", false);
-        return "category-action";
-    }
+//    @GetMapping("/category/add")
+//    public String add(Model model) {
+//        model.addAttribute("titlePage", "Add Category");
+//        model.addAttribute("modelForm", new CategoryEntity());
+//        model.addAttribute("viewOnly", false);
+//        return "category-action";
+//    }
 
-    @GetMapping("/category/edit/{id}")
-    public ResponseEntity<?> edit(@PathVariable("id") int id) throws Exception {
+    @PutMapping("/category/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable("id") int id, @Valid @RequestBody CategoryEntity cateDetail) throws Exception {
         log.info("Edit category with id=" + id);
         CategoryEntity category = categoryService.findByIdCategory(id);
-        if (category != null) {
+        if (category == null) {
+            throw new NotFoundException("Not found id categories");
+        }
+        try {
+            category.setName(cateDetail.getName());
+            category.setCode(cateDetail.getCode());
+            category.setDescription(cateDetail.getDescription());
+            category.setActiveFlag(cateDetail.getActiveFlag());
+            category.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
             categoryService.updateCategory(category);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         return ResponseEntity.ok(category);
     }

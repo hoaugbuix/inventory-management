@@ -3,6 +3,7 @@ package com.inventory.dev.controller;
 import com.inventory.dev.entity.InvoiceEntity;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.ProductInfoEntity;
+import com.inventory.dev.exception.NotFoundException;
 import com.inventory.dev.service.GoodsReceiptReport;
 import com.inventory.dev.service.InvoiceService;
 import com.inventory.dev.service.ProductService;
@@ -11,6 +12,7 @@ import com.inventory.dev.validate.InvoiceValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -76,56 +79,29 @@ public class GoodsIssueController {
 
     }
 
-    @GetMapping("/goods-issue/add")
-    public String add(Model model) {
-        model.addAttribute("titlePage", "Add Invoice");
-        model.addAttribute("modelForm", new InvoiceEntity());
-        model.addAttribute("viewOnly", false);
-        model.addAttribute("mapProduct", initMapProduct());
-        return "goods-issue-action";
-    }
-
     @GetMapping("/goods-issue/edit/{id}")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public ResponseEntity<?> edit(@PathVariable("id") int id) {
         log.info("Edit invoice with id=" + id);
         InvoiceEntity invoice = invoiceService.find("id", id).get(0);
         if (invoice != null) {
-            model.addAttribute("titlePage", "Edit Invoice");
-            model.addAttribute("modelForm", invoice);
-            model.addAttribute("viewOnly", false);
-            model.addAttribute("mapProduct", initMapProduct());
-            return "goods-issue-action";
+//            model.addAttribute("modelForm", invoice);
+//            model.addAttribute("mapProduct", initMapProduct());
         }
-        return "redirect:/goods-issue/list";
+        return ResponseEntity.ok("");
     }
 
     @GetMapping("/goods-issue/view/{id}")
-    public String view(Model model, @PathVariable("id") int id) {
+    public ResponseEntity<?> view(@PathVariable("id") int id) {
         log.info("View invoice with id=" + id);
         InvoiceEntity invoice = invoiceService.find("id", id).get(0);
-        if (invoice != null) {
-            model.addAttribute("titlePage", "View Invoice");
-            model.addAttribute("modelForm", invoice);
-            model.addAttribute("viewOnly", true);
-            return "invoice-action";
+        if (invoice == null) {
+            throw new NotFoundException("Not found find by id" + id);
         }
-        return "redirect:/goods-issue/list";
+        return ResponseEntity.ok(invoice);
     }
 
     @PostMapping("/goods-issue/save")
-    public String save(Model model, @ModelAttribute("modelForm") @Validated InvoiceEntity invoice, BindingResult result, HttpSession session) {
-        if (result.hasErrors()) {
-            if (invoice.getId() != null) {
-                model.addAttribute("titlePage", "Edit Invoice");
-            } else {
-                model.addAttribute("titlePage", "Add Invoice");
-            }
-            model.addAttribute("mapProduct", initMapProduct());
-            model.addAttribute("modelForm", invoice);
-            model.addAttribute("viewOnly", false);
-            return "goods-issue-action";
-
-        }
+    public ResponseEntity<?> save(@Valid InvoiceEntity invoice, HttpSession session) {
         invoice.setType(Constant.TYPE_GOODS_ISSUES);
         if (invoice.getId() != null && invoice.getId() != 0) {
 
@@ -133,7 +109,6 @@ public class GoodsIssueController {
                 invoiceService.update(invoice);
                 session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 log.error(e.getMessage());
                 session.setAttribute(Constant.MSG_ERROR, "Update has error");
@@ -144,12 +119,10 @@ public class GoodsIssueController {
                 invoiceService.save(invoice);
                 session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                session.setAttribute(Constant.MSG_ERROR, "Insert has error!!!");
+                System.out.println(e.getMessage());
             }
         }
-        return "redirect:/goods-issue/list";
+        return ResponseEntity.ok(invoice);
 
     }
 
@@ -171,7 +144,6 @@ public class GoodsIssueController {
         for (ProductInfoEntity productInfo : productInfos) {
             mapProduct.put(productInfo.getId().toString(), productInfo.getName());
         }
-
         return mapProduct;
     }
 }

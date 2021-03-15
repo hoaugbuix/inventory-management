@@ -38,9 +38,7 @@ public class HistoryController {
         mapType.put(String.valueOf(Constant.TYPE_ALL), "All");
         mapType.put(String.valueOf(Constant.TYPE_GOODS_RECEIPT), "Goods Receipt");
         mapType.put(String.valueOf(Constant.TYPE_GOODS_ISSUES), "Goods Issues");
-//        model.addAttribute("histories", histories);
-//        model.addAttribute("pageInfo", paging);
-//        model.addAttribute("mapType", mapType);
+        System.out.print(mapType+ "mapType");
         return ResponseEntity.ok(histories);
     }
 }

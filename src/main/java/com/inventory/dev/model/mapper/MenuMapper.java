@@ -4,6 +4,7 @@ import com.inventory.dev.entity.MenuEntity;
 import com.inventory.dev.model.dto.MenuDto;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Component
@@ -15,7 +16,7 @@ public class MenuMapper {
         menu.setName(dto.getName());
         menu.setOrderIndex(dto.getOrderIndex());
         menu.setActiveFlag(1);
-        menu.setCreatedDate(new Date(System.currentTimeMillis()));
+        menu.setCreatedDate(new Timestamp(System.currentTimeMillis()));
         return menu;
     }
 

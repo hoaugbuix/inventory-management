@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,8 +69,8 @@ public class MenuServiceImpl implements MenuService {
                 auth.setRoles(role);
                 auth.setMenus(menu);
                 auth.setPermission(1);
-                auth.setCreatedDate(new Date());
-                auth.setUpdatedDate(new Date());
+                auth.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                auth.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                 authDAO.save(auth);
             }
         }

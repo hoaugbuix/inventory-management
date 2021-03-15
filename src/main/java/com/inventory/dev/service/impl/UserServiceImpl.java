@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 @Component
@@ -70,8 +71,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(UserEntity user) {
         user.setActiveFlag(1);
-        user.setCreatedDate(new Date());
-        user.setUpdatedDate(new Date());
+        user.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+        user.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
         user.setPassword(HashingPassword.encrypt(user.getPassword()));
         userDAO.save(user);
         UserRoleEntity userRole = new UserRoleEntity();
@@ -80,8 +81,8 @@ public class UserServiceImpl implements UserService {
         role.setId(user.getId());
         userRole.setRoles(role);
         userRole.setActiveFlag(1);
-        userRole.setCreatedDate(new Date());
-        userRole.setUpdatedDate(new Date());
+        userRole.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+        userRole.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
         userRoleDAO.save(userRole);
     }
 
@@ -107,7 +108,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(UserEntity user) {
         user.setActiveFlag(0);
-        user.setUpdatedDate(new Date());
+        user.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
         userDAO.update(user);
     }
 
