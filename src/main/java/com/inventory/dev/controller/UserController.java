@@ -3,6 +3,7 @@ package com.inventory.dev.controller;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.RoleEntity;
 import com.inventory.dev.entity.UserEntity;
+import com.inventory.dev.entity.UserRoleEntity;
 import com.inventory.dev.exception.NotFoundException;
 import com.inventory.dev.model.mapper.UserMapper;
 import com.inventory.dev.model.request.CreateUserReq;
@@ -113,7 +114,7 @@ public class UserController {
     }
 
     @PutMapping("/user/edit/{id}")
-    public ResponseEntity<?> edit(Model model, @PathVariable("id") int id) {
+    public ResponseEntity<?> edit(@PathVariable("id") int id) {
         log.info("Edit user with id=" + id);
         List<UserEntity> results = userService.findByProperty("id", id);
         if (results != null && !results.isEmpty()) {
@@ -123,19 +124,15 @@ public class UserController {
             for (RoleEntity role : roles) {
                 mapRole.put(String.valueOf(role.getId()), role.getRoleName());
             }
-//            UserRoleEntity userRole =(UserRoleEntity) user.getRoles().iterator().next();
-//            user.setRoleId(userRole.getRole().getId());
-            model.addAttribute("mapRole", mapRole);
-            model.addAttribute("titlePage", "Edit Users");
-            model.addAttribute("modelForm", user);
-            model.addAttribute("viewOnly", false);
-            model.addAttribute("editMode", true);
+            UserRoleEntity userRole =(UserRoleEntity) user.getRoles();
+            user.setRoles((Set<RoleEntity>) userRole.getRoles());
+//            roleService.updateRole(mapRole);
         }
-        return ResponseEntity.ok().body(model.getAttribute("user"));
+        return ResponseEntity.ok(results);
     }
 
     @GetMapping("/user/view/{id}")
-    public ResponseEntity<?> view(Model model, @PathVariable("id") int id) {
+    public ResponseEntity<?> view( @PathVariable("id") int id) {
         log.info("View user with id=" + id);
         List<UserEntity> results = userService.findByProperty("id", id);
         if (results != null && !results.isEmpty()) {
@@ -145,74 +142,44 @@ public class UserController {
             for (RoleEntity role : roles) {
                 mapRole.put(String.valueOf(role.getId()), role.getRoleName());
             }
-            model.addAttribute("mapRole", mapRole);
-            model.addAttribute("titlePage", "View Users");
-            model.addAttribute("modelForm", user);
-            model.addAttribute("viewOnly", true);
-            model.addAttribute("editMode", true);
+
         }
-        return ResponseEntity.ok().body(model.getAttribute("user"));
+        return ResponseEntity.ok(results);
     }
 
     @PostMapping("/user/save")
-    public ResponseEntity<?> save(Model model, @RequestBody @Validated UserEntity user, BindingResult result, HttpSession session) {
-        if (result.hasErrors()) {
-            if (user.getId() != null) {
-                model.addAttribute("titlePage", "Edit Users");
-                model.addAttribute("editMode", true);
-            } else {
-                model.addAttribute("titlePage", "Add Users");
-            }
-            List<RoleEntity> roles = roleService.getRoleList(null, null);
-            Map<String, String> mapRole = new HashMap<>();
-            for (RoleEntity role : roles) {
-                mapRole.put(String.valueOf(role.getId()), role.getRoleName());
-            }
-            model.addAttribute("mapRole", mapRole);
-            model.addAttribute("modelForm", user);
-            model.addAttribute("viewOnly", false);
-            return ResponseEntity.ok().body(model.getAttribute("user"));
-
-        }
-
+    public ResponseEntity<?> save(@Valid @RequestBody UserEntity user) {
         //	UserRole userRole =(UserRole) user.getUserRoles().iterator().next();
         if (user.getId() != null && user.getId() != 0) {
             try {
                 userService.update(user);
-                session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error(e.getMessage());
-                session.setAttribute(Constant.MSG_ERROR, "Update has error");
             }
-
         } else {
             try {
                 userService.save(user);
-                session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
             } catch (Exception e) {
                 e.printStackTrace();
-                session.setAttribute(Constant.MSG_ERROR, "Insert has error!!!");
             }
         }
-        return ResponseEntity.ok().body(model.getAttribute("user"));
+        return ResponseEntity.ok(user);
 
     }
 
     @DeleteMapping("/user/delete/{id}")
-    public ResponseEntity<?> delete(Model model, @PathVariable("id") int id, HttpSession session) {
+    public ResponseEntity<?> delete(@PathVariable("id") int id) {
         log.info("Delete user with id=" + id);
         List<UserEntity> results = userService.findByProperty("id", id);
         if (results != null && !results.isEmpty()) {
             UserEntity user = results.get(0);
             try {
                 userService.deleteUser(user);
-                session.setAttribute(Constant.MSG_SUCCESS, "Delete success!!!");
             } catch (Exception e) {
                 e.printStackTrace();
-                session.setAttribute(Constant.MSG_ERROR, "Delete has error!!!");
             }
         }
-        return ResponseEntity.ok().body(results);
+        return ResponseEntity.ok().body("Delete sucess");
     }
 }

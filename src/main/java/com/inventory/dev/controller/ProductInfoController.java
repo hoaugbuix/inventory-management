@@ -70,20 +70,19 @@ public class ProductInfoController {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/product-info/add")
-    public String add(Model model) {
-        model.addAttribute("titlePage", "Add ProductInfo");
-        model.addAttribute("modelForm", new ProductInfoEntity());
-        List<CategoryEntity> categories = categoryService.getAllCategory(null, null);
-        Map<String, String> mapCategory = new HashMap<>();
-        for (CategoryEntity category : categories) {
-            mapCategory.put(String.valueOf(category.getId()), category.getName());
-        }
-        model.addAttribute("mapCategory", mapCategory);
-        model.addAttribute("mapCategory", mapCategory);
-        model.addAttribute("viewOnly", false);
-        return "productInfo-action";
-    }
+//    @GetMapping("/product-info/add")
+//    public String add(Model model) {
+//        model.addAttribute("titlePage", "Add ProductInfo");
+//        model.addAttribute("modelForm", new ProductInfoEntity());
+//        List<CategoryEntity> categories = categoryService.getAllCategory(null, null);
+//        Map<String, String> mapCategory = new HashMap<>();
+//        for (CategoryEntity category : categories) {
+//            mapCategory.put(String.valueOf(category.getId()), category.getName());
+//        }
+//        model.addAttribute("mapCategory", mapCategory);
+//        model.addAttribute("viewOnly", false);
+//        return "productInfo-action";
+//    }
 
     @GetMapping("/product-info/edit/{id}")
     public ResponseEntity<?> edit( @PathVariable("id") int id) {

@@ -54,13 +54,6 @@ public class RoleController {
         return ResponseEntity.ok().body(roles);
     }
 
-//    @GetMapping("/role/add")
-//    public String add(Model model) {
-//        model.addAttribute("titlePage", "Add Role");
-//        model.addAttribute("modelForm", new RoleEntity());
-//        model.addAttribute("viewOnly", false);
-//        return "role-action";
-//    }
 
     @GetMapping("/role/edit/{id}")
     public ResponseEntity<?> edit(@PathVariable("id") int id) throws Exception {
@@ -84,44 +77,33 @@ public class RoleController {
     }
 
     @PostMapping("/role/save")
-    public ResponseEntity<?> save(@RequestBody @Validated RoleEntity role, HttpSession session) {
-        try {
+    public ResponseEntity<?> save(@Valid @RequestBody RoleEntity role) {
             if (role.getId() != null && role.getId() != 0) {
                 try {
                     roleService.updateRole(role);
-                    session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
                 } catch (Exception e) {
                     e.printStackTrace();
                     log.error(e.getMessage());
-                    session.setAttribute(Constant.MSG_ERROR, "Update has error");
                 }
             } else {
                 try {
                     roleService.saveRole(role);
-                    session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
                 } catch (Exception e) {
                     e.printStackTrace();
-                    session.setAttribute(Constant.MSG_ERROR, "Insert has error!!!");
                 }
             }
-            return ResponseEntity.ok(role != null ? session.getAttribute(Constant.MSG_SUCCESS) : session.getAttribute(Constant.MSG_ERROR));
-
-        } catch (Exception e) {
-            return ResponseEntity.ok(e.getMessage());
-        }
+        return ResponseEntity.ok(role);
     }
 
     @GetMapping("/role/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") int id, HttpSession session) {
+    public ResponseEntity<?> delete(@PathVariable("id") int id) {
         log.info("Delete role with id=" + id);
         RoleEntity role = roleService.findByIdRole(id);
         if (role != null) {
             try {
                 roleService.deleteRole(role);
-                session.setAttribute(Constant.MSG_SUCCESS, "Delete success!!!");
             } catch (Exception e) {
                 e.printStackTrace();
-                session.setAttribute(Constant.MSG_ERROR, "Delete has error!!!");
             }
         }
         return ResponseEntity.ok("Delete success!!!");

@@ -3,6 +3,7 @@ package com.inventory.dev.controller;
 import com.inventory.dev.entity.InvoiceEntity;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.ProductInfoEntity;
+import com.inventory.dev.exception.NotFoundException;
 import com.inventory.dev.service.GoodsReceiptReport;
 import com.inventory.dev.service.InvoiceService;
 import com.inventory.dev.service.ProductService;
@@ -11,6 +12,7 @@ import com.inventory.dev.validate.InvoiceValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,7 +57,7 @@ public class GoodsReceiptController {
     }
 
     @RequestMapping(value = "/goods-receipt/list/{page}")
-    public String showInvoiceList(Model model, HttpSession session, @ModelAttribute("searchForm") InvoiceEntity invoice, @PathVariable("page") int page) {
+    public ResponseEntity<?> showInvoiceList(Model model, HttpSession session, @ModelAttribute("searchForm") InvoiceEntity invoice, @PathVariable("page") int page) {
         Paging paging = new Paging(5);
         paging.setIndexPage(page);
         if (invoice == null) {
@@ -62,93 +65,51 @@ public class GoodsReceiptController {
         }
         invoice.setType(Constant.TYPE_GOODS_RECEIPT);
         List<InvoiceEntity> invoices = invoiceService.getList(invoice, paging);
-        if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
-            model.addAttribute(Constant.MSG_SUCCESS, session.getAttribute(Constant.MSG_SUCCESS));
-            session.removeAttribute(Constant.MSG_SUCCESS);
+        if (invoices.isEmpty()) {
+            throw new NotFoundException("Not found!");
         }
-        if (session.getAttribute(Constant.MSG_ERROR) != null) {
-            model.addAttribute(Constant.MSG_ERROR, session.getAttribute(Constant.MSG_ERROR));
-            session.removeAttribute(Constant.MSG_ERROR);
-        }
-        model.addAttribute("pageInfo", paging);
-        model.addAttribute("invoices", invoices);
-        return "goods-receipt-list";
-
+        return ResponseEntity.ok(invoices);
     }
 
-    @GetMapping("/goods-receipt/add")
-    public String add(Model model) {
-        model.addAttribute("titlePage", "Add Invoice");
-        model.addAttribute("modelForm", new InvoiceEntity());
-        model.addAttribute("viewOnly", false);
-        model.addAttribute("mapProduct", initMapProduct());
-        return "goods-receipt-action";
-    }
 
     @GetMapping("/goods-receipt/edit/{id}")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public ResponseEntity<?> edit(@PathVariable("id") int id) throws Exception {
         log.info("Edit invoice with id=" + id);
         InvoiceEntity invoice = invoiceService.find("id", id).get(0);
         if (invoice != null) {
-            model.addAttribute("titlePage", "Edit Invoice");
-            model.addAttribute("modelForm", invoice);
-            model.addAttribute("viewOnly", false);
-            model.addAttribute("mapProduct", initMapProduct());
-            return "goods-receipt-action";
+           invoiceService.update(invoice);
         }
-        return "redirect:/goods-receipt/list";
+        return ResponseEntity.ok("Edit success!");
     }
 
     @GetMapping("/goods-receipt/view/{id}")
-    public String view(Model model, @PathVariable("id") int id) {
+    public ResponseEntity<?> view(@PathVariable("id") int id) {
         log.info("View invoice with id=" + id);
         InvoiceEntity invoice = invoiceService.find("id", id).get(0);
-        if (invoice != null) {
-            model.addAttribute("titlePage", "View Invoice");
-            model.addAttribute("modelForm", invoice);
-            model.addAttribute("viewOnly", true);
-            return "invoice-action";
+        if (invoice == null) {
+            throw new NotFoundException("Not found");
         }
-        return "redirect:/goods-receipt/list";
+        return ResponseEntity.ok(invoice);
     }
 
     @PostMapping("/goods-receipt/save")
-    public String save(Model model, @ModelAttribute("modelForm") @Validated InvoiceEntity invoice, BindingResult result, HttpSession session) {
-        if (result.hasErrors()) {
-            if (invoice.getId() != null) {
-                model.addAttribute("titlePage", "Edit Invoice");
-            } else {
-                model.addAttribute("titlePage", "Add Invoice");
-            }
-            model.addAttribute("mapProduct", initMapProduct());
-            model.addAttribute("modelForm", invoice);
-            model.addAttribute("viewOnly", false);
-            return "goods-receipt-action";
-
-        }
+    public ResponseEntity<?> save( @Valid @RequestBody InvoiceEntity invoice) {
         invoice.setType(Constant.TYPE_GOODS_RECEIPT);
         if (invoice.getId() != null && invoice.getId() != 0) {
             try {
                 invoiceService.update(invoice);
-                session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 log.error(e.getMessage());
-                session.setAttribute(Constant.MSG_ERROR, "Update has error");
             }
-
         } else {
             try {
                 invoiceService.save(invoice);
-                session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
-                session.setAttribute(Constant.MSG_ERROR, "Insert has error!!!");
             }
         }
-        return "redirect:/goods-receipt/list";
+        return ResponseEntity.ok(invoice);
 
     }
 

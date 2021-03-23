@@ -49,27 +49,16 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/category/list/{page}")
-    public ResponseEntity<?> showCategoryList(HttpSession session, CategoryEntity category, @PathVariable("page") int page) {
+    public ResponseEntity<?> showCategoryList( CategoryEntity category, @PathVariable("page") int page) {
         Paging paging = new Paging(5);
         paging.setIndexPage(page);
         List<CategoryEntity> categories = categoryService.getAllCategory(category, paging);
-        if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
-            session.removeAttribute(Constant.MSG_SUCCESS);
-        }
-        if (session.getAttribute(Constant.MSG_ERROR) != null) {
-            session.removeAttribute(Constant.MSG_ERROR);
+        if (categories == null){
+            throw new NotFoundException("Not Found");
         }
         return ResponseEntity.ok(categories);
-
     }
 
-//    @GetMapping("/category/add")
-//    public String add(Model model) {
-//        model.addAttribute("titlePage", "Add Category");
-//        model.addAttribute("modelForm", new CategoryEntity());
-//        model.addAttribute("viewOnly", false);
-//        return "category-action";
-//    }
 
     @PutMapping("/category/edit/{id}")
     public ResponseEntity<?> edit(@PathVariable("id") int id, @Valid @RequestBody CategoryEntity cateDetail) throws Exception {
@@ -103,43 +92,37 @@ public class CategoryController {
     }
 
     @PostMapping("/category/save")
-    public ResponseEntity<?> save(@RequestBody @Valid CategoryEntity category, HttpSession session) {
+    public ResponseEntity<?> save(@RequestBody @Valid CategoryEntity category) {
 //        CategoryEntity cate = (CategoryEntity) categoryService.findCategory(category.getName(),category);
-        if (category == null) {
+        if (category != null) {
             try {
                 categoryService.updateCategory(category);
-                session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error(e.getMessage());
-                session.setAttribute(Constant.MSG_ERROR, "Update has error");
             }
         } else {
             try {
                 categoryService.saveCategory(category);
-                session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
             } catch (Exception e) {
                 e.printStackTrace();
-                session.setAttribute(Constant.MSG_ERROR, "Insert has error!!!");
             }
         }
-        return ResponseEntity.ok(session.getAttribute(Constant.MSG_SUCCESS));
+        return ResponseEntity.ok(category);
 
     }
 
     @GetMapping("/category/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") int id, HttpSession session) {
+    public ResponseEntity<?> delete(@PathVariable("id") int id) {
         log.info("Delete category with id=" + id);
         CategoryEntity category = categoryService.findByIdCategory(id);
         if (category != null) {
             try {
                 categoryService.deleteCategory(category);
-                session.setAttribute(Constant.MSG_SUCCESS, "Delete success!!!");
             } catch (Exception e) {
                 e.printStackTrace();
-                session.setAttribute(Constant.MSG_ERROR, "Delete has error!!!");
             }
         }
-        return ResponseEntity.ok(session.getAttribute(Constant.MSG_SUCCESS));
+        return ResponseEntity.ok("Delete success");
     }
 }

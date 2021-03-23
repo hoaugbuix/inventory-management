@@ -57,7 +57,7 @@ public class GoodsIssueController {
     }
 
     @RequestMapping(value = "/goods-issue/list/{page}")
-    public String showInvoiceList(Model model, HttpSession session, @ModelAttribute("searchForm") InvoiceEntity invoice, @PathVariable("page") int page) {
+    public ResponseEntity<?> showInvoiceList(InvoiceEntity invoice, @PathVariable("page") int page) {
         Paging paging = new Paging(5);
         paging.setIndexPage(page);
         if (invoice == null) {
@@ -65,29 +65,20 @@ public class GoodsIssueController {
         }
         invoice.setType(Constant.TYPE_GOODS_ISSUES);
         List<InvoiceEntity> invoices = invoiceService.getList(invoice, paging);
-        if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
-            model.addAttribute(Constant.MSG_SUCCESS, session.getAttribute(Constant.MSG_SUCCESS));
-            session.removeAttribute(Constant.MSG_SUCCESS);
+        if (invoices.isEmpty()) {
+            throw new NotFoundException("Not found");
         }
-        if (session.getAttribute(Constant.MSG_ERROR) != null) {
-            model.addAttribute(Constant.MSG_ERROR, session.getAttribute(Constant.MSG_ERROR));
-            session.removeAttribute(Constant.MSG_ERROR);
-        }
-        model.addAttribute("pageInfo", paging);
-        model.addAttribute("invoices", invoices);
-        return "goods-issue-list";
-
+        return ResponseEntity.ok(invoices);
     }
 
     @GetMapping("/goods-issue/edit/{id}")
-    public ResponseEntity<?> edit(@PathVariable("id") int id) {
+    public ResponseEntity<?> edit(@PathVariable("id") int id) throws Exception {
         log.info("Edit invoice with id=" + id);
         InvoiceEntity invoice = invoiceService.find("id", id).get(0);
         if (invoice != null) {
-//            model.addAttribute("modelForm", invoice);
-//            model.addAttribute("mapProduct", initMapProduct());
+            invoiceService.update(invoice);
         }
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("Edit success!");
     }
 
     @GetMapping("/goods-issue/view/{id}")
@@ -101,23 +92,18 @@ public class GoodsIssueController {
     }
 
     @PostMapping("/goods-issue/save")
-    public ResponseEntity<?> save(@Valid InvoiceEntity invoice, HttpSession session) {
+    public ResponseEntity<?> save(@Valid @RequestBody InvoiceEntity invoice) {
         invoice.setType(Constant.TYPE_GOODS_ISSUES);
         if (invoice.getId() != null && invoice.getId() != 0) {
-
             try {
                 invoiceService.update(invoice);
-                session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error(e.getMessage());
-                session.setAttribute(Constant.MSG_ERROR, "Update has error");
             }
-
         } else {
             try {
                 invoiceService.save(invoice);
-                session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }

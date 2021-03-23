@@ -2,9 +2,8 @@ package com.inventory.dev.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -25,4 +24,7 @@ public class MenuEntity extends BaseEntity {
 
     @Column(name = "order_index")
     private int orderIndex;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "menus")
+    private Set<AuthEntity> auths;
 }

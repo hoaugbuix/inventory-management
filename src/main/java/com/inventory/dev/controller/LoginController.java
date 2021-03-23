@@ -82,37 +82,37 @@ public class LoginController {
     @PostMapping("/processLogin")
     public ResponseEntity<?> processLogin( @Validated UserEntity users, HttpSession session) {
 
-        UserEntity user = userService.findByProperty("userName", users.getUsername()).get(0);
-//        UserRoleEntity userRole =(UserRoleEntity) user.getRoles().iterator().next();
-//        List<MenuEntity> menuList = new ArrayList<>();
-//        RoleEntity role = userRole.getRoles();
-//        List<MenuEntity> menuChildList = new ArrayList<>();
-//        for(Object obj : role.getAuths()) {
-//            AuthEntity auth = (AuthEntity) obj;
-//            MenuEntity menu = auth.getMenus();
-//            if(menu.getParentId()==0 && menu.getOrderIndex()!=-1 && menu.getActiveFlag()==1 && auth.getPermission()==1 && auth.getActiveFlag()==1) {
+        UserEntity user = userService.findByProperty("username", users.getUsername()).get(0);
+        UserRoleEntity userRole =(UserRoleEntity) user.getRoles();
+        List<MenuEntity> menuList = new ArrayList<>();
+        RoleEntity role = userRole.getRoles();
+        List<MenuEntity> menuChildList = new ArrayList<>();
+        for(Object obj : role.getAuths()) {
+            AuthEntity auth = (AuthEntity) obj;
+            MenuEntity menu = auth.getMenus();
+            if(menu.getParentId()==0 && menu.getOrderIndex()!=-1 && menu.getActiveFlag()==1 && auth.getPermission()==1 && auth.getActiveFlag()==1) {
 //                menu.setIdMenu(menu.getUrl().replace("/", "")+"Id");
-//                menuList.add(menu);
-//            }else if( menu.getParentId()!=0 && menu.getOrderIndex()!=-1 && menu.getActiveFlag()==1 && auth.getPermission()==1 && auth.getActiveFlag()==1) {
+                menuList.add(menu);
+            }else if( menu.getParentId()!=0 && menu.getOrderIndex()!=-1 && menu.getActiveFlag()==1 && auth.getPermission()==1 && auth.getActiveFlag()==1) {
 //                menu.setIdMenu(menu.getUrl().replace("/", "")+"Id");
-//                menuChildList.add(menu);
-//            }
-//        }
-//        for(MenuEntity menu : menuList) {
-//            List<MenuEntity> childList = new ArrayList<>();
-//            for(MenuEntity childMenu : menuChildList) {
-//                if(childMenu.getParentId()== menu.getId()) {
-//                    childList.add(childMenu);
-//                }
-//            }
+                menuChildList.add(menu);
+            }
+        }
+        for(MenuEntity menu : menuList) {
+            List<MenuEntity> childList = new ArrayList<>();
+            for(MenuEntity childMenu : menuChildList) {
+                if(childMenu.getParentId()== menu.getId()) {
+                    childList.add(childMenu);
+                }
+            }
 //            menu.setChild(childList);
-//        }
-//        sortMenu(menuList);
-//        for(MenuEntity menu : menuList) {
+        }
+        sortMenu(menuList);
+        for(MenuEntity menu : menuList) {
 //            sortMenu(menu.getChild());
-//        }
-//        session.setAttribute(Constant.MENU_SESSION, menuList);
-//        session.setAttribute(Constant.USER_INFO, user);
+        }
+        session.setAttribute(Constant.MENU_SESSION, menuList);
+        session.setAttribute(Constant.USER_INFO, user);
         return ResponseEntity.ok("");
     }
 

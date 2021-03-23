@@ -1,20 +1,24 @@
 package com.inventory.dev.controller;
 
 import com.inventory.dev.entity.*;
+import com.inventory.dev.model.mapper.MenuMapper;
 import com.inventory.dev.service.MenuService;
 import com.inventory.dev.service.RoleService;
 import com.inventory.dev.util.Constant;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.*;
 
 @Controller
 public class MenuController {
+    static final Logger log = Logger.getLogger(MenuController.class);
+
     @Autowired
     private MenuService menuService;
     @Autowired
@@ -26,7 +30,7 @@ public class MenuController {
     }
 
     @RequestMapping("/menu/list/{page}")
-    public ResponseEntity<?> menuList(@PathVariable("page") int page, MenuEntity menu, HttpSession session) {
+    public ResponseEntity<?> menuList(@PathVariable("page") int page, MenuEntity menu) {
         Paging paging = new Paging(15);
         paging.setIndexPage(page);
         List<MenuEntity> menuList = menuService.getListMenu(paging, menu);
@@ -37,26 +41,22 @@ public class MenuController {
             for (RoleEntity role : roles) {
                 mapAuth.put(role.getId(), 0);// 1-0 ,2-0,3-0
             }
-//            for (Object obj : item.getAuths()) {
-//                AuthEntity auth = (AuthEntity) obj;
-//                mapAuth.put(auth.getRoles().getId(), auth.getPermission());
-//            }
+            for (Object obj : item.getAuths()) {
+                AuthEntity auth = (AuthEntity) obj;
+                mapAuth.put(auth.getRoles().getId(), auth.getPermission());
+            }
 //            item.setMapAuth(mapAuth);
         }
-        if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
-            session.removeAttribute(Constant.MSG_SUCCESS);
-        }
-        if (session.getAttribute(Constant.MSG_ERROR) != null) {
-            session.removeAttribute(Constant.MSG_ERROR);
-        }
-//        model.addAttribute("menuList", menuList);
-//        model.addAttribute("roles", roles);
-//        model.addAttribute("pageInfo", paging);
+//        Object obk = null;
+//        for (MenuEntity obj : menuList) {
+//            obk = MenuMapper.toMenuDto(obj);
+//        }
+
         return ResponseEntity.ok(menuList);
     }
 
     @GetMapping("/menu/change-status/{id}")
-    public ResponseEntity<?> change(Model model, @PathVariable("id") int id, HttpSession session) {
+    public ResponseEntity<?> change(@PathVariable("id") int id, HttpSession session) {
         try {
             menuService.changeStatus(id);
             session.setAttribute(Constant.MSG_SUCCESS, "Change status success!!!");
@@ -68,25 +68,21 @@ public class MenuController {
     }
 
     @GetMapping("/menu/permission")
-    public String permission(Model model) {
-        model.addAttribute("modelForm", new AuthFormEntity());
-        initSelectbox(model);
-        return "menu-permission";
+    public Object permission() {
+        return initSelectbox();
     }
 
     @PostMapping("/menu/update-permission")
-    public ResponseEntity<?> updatePermission(Model model, HttpSession session, @ModelAttribute("modelForm") AuthFormEntity authForm) {
+    public ResponseEntity<?> updatePermission(@Valid @RequestBody AuthFormEntity authForm) {
         try {
             menuService.updatePermission(authForm.getRoleId(), authForm.getMenuId(), authForm.getPermission());
-            session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute(Constant.MSG_ERROR, "Update has error!!!");
         }
         return ResponseEntity.ok(Constant.MSG_SUCCESS);
     }
 
-    private void initSelectbox(Model model) {
+    private ResponseEntity<?> initSelectbox() {
         List<RoleEntity> roles = roleService.getRoleList(null, null);
         List<MenuEntity> menus = menuService.getListMenu(null, null);
         Map<Integer, String> mapRole = new HashMap<>();
@@ -97,7 +93,8 @@ public class MenuController {
         for (MenuEntity menu : menus) {
             mapMenu.put(menu.getId(), menu.getUrl());
         }
-        model.addAttribute("mapRole", mapRole);
-        model.addAttribute("mapMenu", mapMenu);
+        Map<Object, Object> newData = new HashMap<>();
+        newData.put(mapRole, mapMenu);
+        return ResponseEntity.ok(newData);
     }
 }
