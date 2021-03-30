@@ -117,9 +117,6 @@ public class LoginController {
         for (MenuDto menu : menuList) {
             sortMenu(menu.getChild());
         }
-
-//        session.setAttribute(Constant.MENU_SESSION, menuList);
-//        session.setAttribute(Constant.USER_INFO, user);
         return ResponseEntity.ok(menuList);
     }
 

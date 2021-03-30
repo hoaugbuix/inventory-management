@@ -19,6 +19,11 @@ public class ProductInStockController {
     @Autowired
     private ProductInStockService productInStockService;
 
+    @GetMapping({"/product-in-stock/list","/product-in-stock/list/"})
+    public String redirect() {
+        return "redirect:/product-in-stock/list/1";
+    }
+
     @GetMapping(value = "/product-in-stock/list/{page}")
     public ResponseEntity<?> list(ProductInStockEntity productInStock, @PathVariable("page") int page) {
         Paging paging = new Paging(5);
