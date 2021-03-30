@@ -20,18 +20,18 @@ import java.util.Date;
 public abstract class BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(notes = "The database generated User ID")
+    @ApiModelProperty(notes = "The database generated ID")
     @Column(name = "id")
     private Integer id;
 
     @Column(name = "active_flag", columnDefinition = "Integer default 1")
     private int activeFlag;
 
-    @Column(name = "created_date", nullable = true)
+    @Column(name = "created_date")
     @CreatedDate
     private Date createdDate;
 
-    @Column(name = "updated_date", nullable = true)
+    @Column(name = "updated_date")
     @LastModifiedDate
     private Date updatedDate;
 }

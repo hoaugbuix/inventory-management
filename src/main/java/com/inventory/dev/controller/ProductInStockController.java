@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -21,7 +20,7 @@ public class ProductInStockController {
     private ProductInStockService productInStockService;
 
     @GetMapping(value = "/product-in-stock/list/{page}")
-    public ResponseEntity<?> list(Model model, ProductInStockEntity productInStock, @PathVariable("page") int page) {
+    public ResponseEntity<?> list(ProductInStockEntity productInStock, @PathVariable("page") int page) {
         Paging paging = new Paging(5);
         paging.setIndexPage(page);
         List<ProductInStockEntity> productInStocks = productInStockService.getAll(productInStock, paging);

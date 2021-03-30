@@ -4,13 +4,11 @@ import com.inventory.dev.dao.CategoryDAO;
 import com.inventory.dev.entity.CategoryEntity;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.service.CategoryService;
-import com.inventory.dev.util.DateUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,22 +24,23 @@ public class CategoryServiceImpl implements CategoryService {
     public void saveCategory(CategoryEntity category) throws Exception {
         log.info("Insert category " + category.toString());
         category.setActiveFlag(1);
-        category.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-        category.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+        category.setCreatedDate(new Date());
+        category.setUpdatedDate(new Date());
         categoryDAO.save(category);
     }
 
     @Override
     public void updateCategory(CategoryEntity category) throws Exception {
         log.info("Update category " + category.toString());
-        category.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+        category.setUpdatedDate(new Date());
+
         categoryDAO.update(category);
     }
 
     @Override
     public void deleteCategory(CategoryEntity category) throws Exception {
         category.setActiveFlag(0);
-        category.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+        category.setUpdatedDate(new Date());
         log.info("Delete category " + category.toString());
         categoryDAO.update(category);
     }

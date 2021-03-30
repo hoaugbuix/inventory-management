@@ -13,23 +13,15 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Map;
 
-@Controller
+@RestController
 public class GoodsIssueController {
     static final Logger log = Logger.getLogger(GoodsIssueController.class);
     @Autowired
@@ -93,43 +85,40 @@ public class GoodsIssueController {
 
     @PostMapping("/goods-issue/save")
     public ResponseEntity<?> save(@Valid @RequestBody InvoiceEntity invoice) {
-        invoice.setType(Constant.TYPE_GOODS_ISSUES);
-        if (invoice.getId() != null && invoice.getId() != 0) {
-            try {
-                invoiceService.update(invoice);
-            } catch (Exception e) {
-                e.printStackTrace();
-                log.error(e.getMessage());
-            }
-        } else {
-            try {
-                invoiceService.save(invoice);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        return ResponseEntity.ok(invoice);
-
-    }
-
-    @GetMapping("/goods-issue/export")
-    public ModelAndView exportReport() {
-        ModelAndView modelAndView = new ModelAndView();
-        InvoiceEntity invoice = new InvoiceEntity();
-        invoice.setType(Constant.TYPE_GOODS_ISSUES);
-        List<InvoiceEntity> invoices = invoiceService.getList(invoice, null);
-        modelAndView.addObject(Constant.KEY_GOODS_RECEIPT_REPORT, invoices);
-        modelAndView.setView(new GoodsReceiptReport());
-        return modelAndView;
-    }
-
-
-    private Map<String, String> initMapProduct() {
+        log.info("invoice find = " + invoice.toString());
         List<ProductInfoEntity> productInfos = productService.getAllProductInfo(null, null);
-        Map<String, String> mapProduct = new HashMap<>();
-        for (ProductInfoEntity productInfo : productInfos) {
-            mapProduct.put(productInfo.getId().toString(), productInfo.getName());
+
+        for (ProductInfoEntity product : productInfos){
+            invoice.setProductInfos(product);
         }
-        return mapProduct;
+        invoice.setType(Constant.TYPE_GOODS_ISSUES);
+        try {
+            invoiceService.save(invoice);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+        return ResponseEntity.ok("Success");
     }
+
+//    @GetMapping("/goods-issue/export")
+//    public ModelAndView exportReport() {
+//        ModelAndView modelAndView = new ModelAndView();
+//        InvoiceEntity invoice = new InvoiceEntity();
+//        invoice.setType(Constant.TYPE_GOODS_ISSUES);
+//        List<InvoiceEntity> invoices = invoiceService.getList(invoice, null);
+//        modelAndView.addObject(Constant.KEY_GOODS_RECEIPT_REPORT, invoices);
+//        modelAndView.setView(new GoodsReceiptReport());
+//        return modelAndView;
+//    }
+
+
+//    private Map<String, String> initMapProduct() {
+//        List<ProductInfoEntity> productInfos = productService.getAllProductInfo(null, null);
+//        Map<String, String> mapProduct = new HashMap<>();
+//        for (ProductInfoEntity productInfo : productInfos) {
+//            mapProduct.put(productInfo.getId().toString(), productInfo.getName());
+//        }
+//        return mapProduct;
+//    }
 }

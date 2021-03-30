@@ -19,7 +19,6 @@ public class InvoiceValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        // TODO Auto-generated method stub
         return clazz == InvoiceEntity.class;
     }
 
@@ -47,7 +46,7 @@ public class InvoiceValidator implements Validator {
         if (invoice.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             errors.rejectValue("price", "msg.wrong.format");
         }
-        if (invoice.getFromDate() != null && invoice.getToDate() != null) {
+        if (invoice.getFromDate() == null && invoice.getToDate() == null) {
             if (invoice.getFromDate().after(invoice.getToDate())) {
                 errors.rejectValue("fromDate", "msg.wrong.date");
             }

@@ -3,18 +3,15 @@ package com.inventory.dev.controller;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.RoleEntity;
 import com.inventory.dev.service.RoleService;
-import com.inventory.dev.util.Constant;
 import com.inventory.dev.validate.RoleValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,18 +52,22 @@ public class RoleController {
     }
 
 
-    @GetMapping("/role/edit/{id}")
-    public ResponseEntity<?> edit(@PathVariable("id") int id) throws Exception {
+    @PutMapping("/role/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable("id") int id, @Valid @RequestBody RoleEntity roleEntity) throws Exception {
         log.info("Edit role with id=" + id);
         RoleEntity role = roleService.findByIdRole(id);
         if (role != null) {
-            roleService.updateRole(role);
+            try {
+                roleService.updateRole(roleEntity);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
-        return ResponseEntity.ok().body("update thanh cong" + role);
+        return ResponseEntity.ok().body("update thanh cong" + roleEntity.toString());
     }
 
     @GetMapping("/role/view/{id}")
-    public ResponseEntity<?> view(@Valid @PathVariable("id") int id) {
+    public ResponseEntity<?> view(@PathVariable("id") int id) {
         log.info("View role with id=" + id);
         RoleEntity role = roleService.findByIdRole(id);
         List<Object> obj = new ArrayList<>();
@@ -78,20 +79,20 @@ public class RoleController {
 
     @PostMapping("/role/save")
     public ResponseEntity<?> save(@Valid @RequestBody RoleEntity role) {
-            if (role.getId() != null && role.getId() != 0) {
-                try {
-                    roleService.updateRole(role);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    log.error(e.getMessage());
-                }
-            } else {
-                try {
-                    roleService.saveRole(role);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        if (role.getId() != null && role.getId() != 0) {
+            try {
+                roleService.updateRole(role);
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error(e.getMessage());
             }
+        } else {
+            try {
+                roleService.saveRole(role);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return ResponseEntity.ok(role);
     }
 

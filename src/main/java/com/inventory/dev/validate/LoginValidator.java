@@ -19,7 +19,6 @@ public class LoginValidator implements Validator {
     private UserService userService;
 
     public boolean supports(Class<?> clazz) {
-        // TODO Auto-generated method stub
         return clazz == UserEntity.class;
     }
 
@@ -37,6 +36,5 @@ public class LoginValidator implements Validator {
                 errors.rejectValue("username", "msg.wrong.username");
             }
         }
-
     }
 }

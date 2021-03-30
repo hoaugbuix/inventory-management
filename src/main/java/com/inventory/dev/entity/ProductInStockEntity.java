@@ -3,6 +3,7 @@ package com.inventory.dev.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Setter
 @Getter
@@ -14,6 +15,9 @@ import javax.persistence.*;
 public class ProductInStockEntity extends BaseEntity {
     @Column(name = "qty")
     private int qty;
+
+    @Column(name = "price")
+    private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

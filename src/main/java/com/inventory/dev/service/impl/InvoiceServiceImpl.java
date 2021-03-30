@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,16 +30,17 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public void save(InvoiceEntity invoice) throws Exception {
-        ProductInfoEntity productInfo = new ProductInfoEntity();
-//        productInfo.setId(invoice.getProductId());
-        invoice.setProductInfos(productInfo);
-        invoice.setActiveFlag(1);
-        invoice.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-        invoice.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
-        invoiceDAO.save(invoice);
-        historyService.save(invoice, Constant.ACTION_ADD);
-
-        productInStockService.saveOrUpdate(invoice);
+        try {
+            invoice.setActiveFlag(1);
+            invoice.setCreatedDate(new Date());
+            invoice.setUpdatedDate(new Date());
+            invoiceDAO.save(invoice);
+            historyService.save(invoice, Constant.ACTION_ADD);
+            productInStockService.saveOrUpdate(invoice);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
     }
 
     @Override
@@ -49,7 +49,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         ProductInfoEntity productInfo = new ProductInfoEntity();
 //        productInfo.setId(invoice.getProductId());
         invoice.setProductInfos(productInfo);
-        invoice.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+        invoice.setUpdatedDate(new Date());
         InvoiceEntity invoice2 = new InvoiceEntity();
         invoice2.setProductInfos(invoice.getProductInfos());
         invoice2.setQty(invoice.getQty() - originQty);

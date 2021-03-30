@@ -53,7 +53,7 @@ public class BaseDAOImpl<E> implements BaseDAO<E> {
 
     @Override
     public E findById(Class<E> e, Serializable id) {
-        log.info("Find by ID= "+ id);
+        log.info("Find by ID= " + id);
         return entityManager.find(e, id);
     }
 

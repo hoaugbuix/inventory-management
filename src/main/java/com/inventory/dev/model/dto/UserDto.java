@@ -1,6 +1,7 @@
 package com.inventory.dev.model.dto;
 
 import com.inventory.dev.entity.UserEntity;
+import com.inventory.dev.entity.UserRoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,6 @@ public class UserDto extends AbstractDto<UserEntity> {
     private String username;
     private String password;
     private Set<String> roles;
-    private Set userRoles = new HashSet(0);
+    private Set<UserRoleEntity> userRoles = new HashSet<>();
     private Integer roleID;
 }

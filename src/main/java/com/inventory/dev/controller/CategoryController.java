@@ -4,26 +4,24 @@ import com.inventory.dev.entity.CategoryEntity;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.exception.NotFoundException;
 import com.inventory.dev.service.CategoryService;
-import com.inventory.dev.util.Constant;
 import com.inventory.dev.validate.CategoryValidator;
+import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 public class CategoryController {
     static final Logger log = Logger.getLogger(CategoryController.class);
     @Autowired
@@ -49,11 +47,11 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/category/list/{page}")
-    public ResponseEntity<?> showCategoryList( CategoryEntity category, @PathVariable("page") int page) {
+    public ResponseEntity<?> showCategoryList(CategoryEntity category, @PathVariable("page") int page) {
         Paging paging = new Paging(5);
         paging.setIndexPage(page);
         List<CategoryEntity> categories = categoryService.getAllCategory(category, paging);
-        if (categories == null){
+        if (categories == null) {
             throw new NotFoundException("Not Found");
         }
         return ResponseEntity.ok(categories);
@@ -72,7 +70,7 @@ public class CategoryController {
             category.setCode(cateDetail.getCode());
             category.setDescription(cateDetail.getDescription());
             category.setActiveFlag(cateDetail.getActiveFlag());
-            category.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+            category.setUpdatedDate(new Date());
             categoryService.updateCategory(category);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -94,22 +92,12 @@ public class CategoryController {
     @PostMapping("/category/save")
     public ResponseEntity<?> save(@RequestBody @Valid CategoryEntity category) {
 //        CategoryEntity cate = (CategoryEntity) categoryService.findCategory(category.getName(),category);
-        if (category != null) {
-            try {
-                categoryService.updateCategory(category);
-            } catch (Exception e) {
-                e.printStackTrace();
-                log.error(e.getMessage());
-            }
-        } else {
-            try {
-                categoryService.saveCategory(category);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            categoryService.saveCategory(category);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return ResponseEntity.ok(category);
-
     }
 
     @GetMapping("/category/delete/{id}")

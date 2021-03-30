@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +54,7 @@ public class HistoryServiceImpl implements HistoryService {
 
     @Override
     public void save(InvoiceEntity invoice, String action) {
-        log.info("action"+ action);
+        log.info("action" + action);
         HistoryEntity history = new HistoryEntity();
         history.setProductInfo(invoice.getProductInfos());
         history.setQty(invoice.getQty());
@@ -62,8 +62,8 @@ public class HistoryServiceImpl implements HistoryService {
         history.setPrice(invoice.getPrice());
         history.setActiveFlag(1);
         history.setActionName(action);
-        history.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-        history.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+        history.setCreatedDate(new Date());
+        history.setUpdatedDate(new Date());
         historyDAO.save(history);
     }
 }

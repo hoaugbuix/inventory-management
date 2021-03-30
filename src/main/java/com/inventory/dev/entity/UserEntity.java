@@ -15,7 +15,6 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-//@ToString
 @Entity(name = "user")
 @Table(name = "user")
 @TypeDef(
@@ -25,7 +24,7 @@ import java.util.Set;
 @ApiModel(value = "User model")
 public class UserEntity extends BaseEntity {
     @Column(name = "first_name")
-    private String fistName;
+    private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
@@ -35,9 +34,6 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "email")
     private String email;
-
-//    @Column(name = "verification_code")
-//    private String verificationCode;
 
     @Column(name = "user_name")
     private String username;
@@ -50,4 +46,7 @@ public class UserEntity extends BaseEntity {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<RoleEntity> roles;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private Set<UserRoleEntity> userRoles;
 }

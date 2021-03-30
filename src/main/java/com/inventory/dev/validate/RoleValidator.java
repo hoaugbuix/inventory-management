@@ -15,7 +15,6 @@ public class RoleValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        // TODO Auto-generated method stub
         return clazz == RoleEntity.class;
     }
 

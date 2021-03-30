@@ -4,28 +4,24 @@ import com.inventory.dev.entity.CategoryEntity;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.ProductInfoEntity;
 import com.inventory.dev.exception.NotFoundException;
+import com.inventory.dev.model.request.CreateProductInfoReq;
+import com.inventory.dev.model.request.UpdateProductInfoReq;
 import com.inventory.dev.service.CategoryService;
 import com.inventory.dev.service.ProductService;
-import com.inventory.dev.util.Constant;
 import com.inventory.dev.validate.ProductInfoValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class ProductInfoController {
@@ -57,46 +53,42 @@ public class ProductInfoController {
     }
 
     @RequestMapping(value = "/product-info/list/{page}")
-    public ResponseEntity<?> showProductInfoList(HttpSession session, @ModelAttribute("searchForm") ProductInfoEntity productInfo, @PathVariable("page") int page) {
+    public ResponseEntity<?> showProductInfoList(ProductInfoEntity productInfo, @PathVariable("page") int page) {
         Paging paging = new Paging(5);
         paging.setIndexPage(page);
         List<ProductInfoEntity> products = productService.getAllProductInfo(productInfo, paging);
-        if (session.getAttribute(Constant.MSG_SUCCESS) != null) {
-            session.removeAttribute(Constant.MSG_SUCCESS);
-        }
-        if (session.getAttribute(Constant.MSG_ERROR) != null) {
-            session.removeAttribute(Constant.MSG_ERROR);
-        }
         return ResponseEntity.ok(products);
     }
 
-//    @GetMapping("/product-info/add")
-//    public String add(Model model) {
-//        model.addAttribute("titlePage", "Add ProductInfo");
-//        model.addAttribute("modelForm", new ProductInfoEntity());
-//        List<CategoryEntity> categories = categoryService.getAllCategory(null, null);
-//        Map<String, String> mapCategory = new HashMap<>();
-//        for (CategoryEntity category : categories) {
-//            mapCategory.put(String.valueOf(category.getId()), category.getName());
-//        }
-//        model.addAttribute("mapCategory", mapCategory);
-//        model.addAttribute("viewOnly", false);
-//        return "productInfo-action";
-//    }
 
-    @GetMapping("/product-info/edit/{id}")
-    public ResponseEntity<?> edit( @PathVariable("id") int id) {
+    @PutMapping("/product-info/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable("id") int id, @Valid @RequestBody UpdateProductInfoReq req) throws Exception {
         log.info("Edit productInfo with id=" + id);
         ProductInfoEntity productInfo = productService.findByIdProductInfo(id);
-        if (productInfo != null) {
-            List<CategoryEntity> categories = categoryService.getAllCategory(null, null);
-            Map<String, String> mapCategory = new HashMap<>();
-            for (CategoryEntity category : categories) {
-                mapCategory.put(String.valueOf(category.getId()), category.getName());
+
+        List<CategoryEntity> categories = categoryService.getAllCategory(null, null);
+        Map<String, String> mapCategory = new HashMap<>();
+        for (CategoryEntity category : categories) {
+            mapCategory.put(String.valueOf(category.getId()), category.getName());
+            if (category.getId() == req.getCateId()){
+                productInfo.setCategories(category);
             }
-            productInfo.setCategories(productInfo.getCategories());
         }
-        return ResponseEntity.ok(productInfo);
+        if (productInfo != null) {
+            try {
+                productInfo.setName(req.getName());
+                productInfo.setCode(req.getCode());
+                productInfo.setDescription(req.getDescription());
+                productInfo.setDescription(req.getDescription());
+                productInfo.setActiveFlag(req.getActiveFlag());
+                productInfo.setImgUrl(req.getImgUrl());
+                productInfo.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+                productService.updateProductInfo(productInfo);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Update success");
     }
 
     @GetMapping("/product-info/view/{id}")
@@ -110,54 +102,34 @@ public class ProductInfoController {
     }
 
     @PostMapping("/product-info/save")
-    public ResponseEntity<?> save(@RequestBody @Valid ProductInfoEntity productInfo, HttpSession session) {
-        if (productInfo.getId() != null) {
-            List<CategoryEntity> categories = categoryService.getAllCategory(null, null);
-            Map<String, String> mapCategory = new HashMap<>();
-            for (CategoryEntity category : categories) {
-                mapCategory.put(String.valueOf(category.getId()), category.getName());
+    public ResponseEntity<?> save(@Valid @RequestBody ProductInfoEntity productInfo) {
+
+        try {
+            List<CategoryEntity> category =  categoryService.getAllCategory(null, null);
+//            CategoryEntity ca = categoryService.findByIdCategory();
+//          category.setId(productInfo.getCateId());
+            for (CategoryEntity cate : category) {
+                productInfo.setCategories(cate);
             }
-        }
-        CategoryEntity category = new CategoryEntity();
-        productInfo.setCategories(category);
-        if (productInfo.getId() != null && productInfo.getId() != 0) {
-            try {
-                productService.updateProductInfo(productInfo);
-                session.setAttribute(Constant.MSG_SUCCESS, "Update success!!!");
-            } catch (Exception e) {
+            productService.saveProductInfo(productInfo);
+        } catch (Exception e) {
                 e.printStackTrace();
-                log.error(e.getMessage());
-                session.setAttribute(Constant.MSG_ERROR, "Update has error");
-            }
-        } else {
-            try {
-                productService.saveProductInfo(productInfo);
-                session.setAttribute(Constant.MSG_SUCCESS, "Insert success!!!");
-            } catch (Exception e) {
-                e.printStackTrace();
-                session.setAttribute(Constant.MSG_ERROR, "Insert has error!!!");
-            }
+                ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.ok(session.getAttribute(Constant.MSG_SUCCESS));
+        return new ResponseEntity<>(productInfo, HttpStatus.OK);
     }
 
     @GetMapping("/product-info/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") int id, HttpSession session) {
-        try {
-            log.info("Delete productInfo with id=" + id);
-            ProductInfoEntity productInfo = productService.findByIdProductInfo(id);
-            if (productInfo != null) {
-                try {
-                    productService.deleteProductInfo(productInfo);
-                    session.setAttribute(Constant.MSG_SUCCESS, "Delete success!!!");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    session.setAttribute(Constant.MSG_ERROR, "Delete has error!!!");
-                }
+    public ResponseEntity<?> delete(@PathVariable("id") int id) {
+        log.info("Delete productInfo with id=" + id);
+        ProductInfoEntity productInfo = productService.findByIdProductInfo(id);
+        if (productInfo != null) {
+            try {
+                productService.deleteProductInfo(productInfo);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            return ResponseEntity.ok(session.getAttribute(Constant.MSG_SUCCESS));
-        } catch (Exception e) {
-            return ResponseEntity.ok(session.getAttribute(Constant.MSG_ERROR));
         }
+        return ResponseEntity.ok("Delete success!");
     }
 }

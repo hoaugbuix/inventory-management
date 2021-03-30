@@ -31,21 +31,21 @@ public class RoleServiceImpl implements RoleService {
     public void saveRole(RoleEntity role) throws Exception {
         log.info("Insert role " + role.toString());
         role.setActiveFlag(1);
-        role.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-        role.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+        role.setCreatedDate(new Date());
+        role.setUpdatedDate(new Date());
         roleDAO.save(role);
     }
 
     public void updateRole(RoleEntity role) throws Exception {
         log.info("Update role " + role.toString());
-        role.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+        role.setUpdatedDate(new Date());
         roleDAO.update(role);
     }
 
     @Override
     public void deleteRole(RoleEntity role) throws Exception {
         role.setActiveFlag(0);
-        role.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+        role.setUpdatedDate(new Date());
         log.info("Delete role " + role.toString());
         roleDAO.update(role);
     }

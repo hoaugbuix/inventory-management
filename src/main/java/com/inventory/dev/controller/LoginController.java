@@ -2,6 +2,8 @@ package com.inventory.dev.controller;
 
 import com.inventory.dev.entity.*;
 import com.inventory.dev.exception.BadRequestException;
+import com.inventory.dev.model.dto.MenuDto;
+import com.inventory.dev.model.mapper.MenuMapper;
 import com.inventory.dev.model.mapper.UserMapper;
 import com.inventory.dev.model.request.LoginReq;
 import com.inventory.dev.security.CustomUserDetails;
@@ -9,17 +11,18 @@ import com.inventory.dev.security.JwtTokenUtil;
 import com.inventory.dev.service.UserService;
 import com.inventory.dev.util.Constant;
 import com.inventory.dev.validate.LoginValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +33,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 public class LoginController {
     //7ngay
     private static final int MAX_AGE_COOKIE = 7 * 24 * 60 * 60;
@@ -80,47 +84,50 @@ public class LoginController {
 
 
     @PostMapping("/processLogin")
-    public ResponseEntity<?> processLogin( @Validated UserEntity users, HttpSession session) {
-
+    public ResponseEntity<?> processLogin(@Valid @RequestBody UserEntity users) {
         UserEntity user = userService.findByProperty("username", users.getUsername()).get(0);
-        UserRoleEntity userRole =(UserRoleEntity) user.getRoles();
-        List<MenuEntity> menuList = new ArrayList<>();
+        UserRoleEntity userRole = (UserRoleEntity) user.getRoles();
+        List<MenuDto> menuList = new ArrayList<>();
         RoleEntity role = userRole.getRoles();
-        List<MenuEntity> menuChildList = new ArrayList<>();
-        for(Object obj : role.getAuths()) {
+        List<MenuDto> menuChildList = new ArrayList<>();
+        for (Object obj : role.getAuths()) {
             AuthEntity auth = (AuthEntity) obj;
-            MenuEntity menu = auth.getMenus();
-            if(menu.getParentId()==0 && menu.getOrderIndex()!=-1 && menu.getActiveFlag()==1 && auth.getPermission()==1 && auth.getActiveFlag()==1) {
-//                menu.setIdMenu(menu.getUrl().replace("/", "")+"Id");
+            MenuEntity me = auth.getMenus();
+
+            MenuDto menu = MenuMapper.toMenuDto(me);
+
+            if (menu.getParentId() == 0 && menu.getOrderIndex() != -1 && menu.getActiveFlag() == 1 && auth.getPermission() == 1 && auth.getActiveFlag() == 1) {
+                menu.setIdMenu(menu.getUrl().replace("/", "")+"Id");
                 menuList.add(menu);
-            }else if( menu.getParentId()!=0 && menu.getOrderIndex()!=-1 && menu.getActiveFlag()==1 && auth.getPermission()==1 && auth.getActiveFlag()==1) {
-//                menu.setIdMenu(menu.getUrl().replace("/", "")+"Id");
+            } else if (menu.getParentId() != 0 && menu.getOrderIndex() != -1 && menu.getActiveFlag() == 1 && auth.getPermission() == 1 && auth.getActiveFlag() == 1) {
+                menu.setIdMenu(menu.getUrl().replace("/", "")+"Id");
                 menuChildList.add(menu);
             }
         }
-        for(MenuEntity menu : menuList) {
-            List<MenuEntity> childList = new ArrayList<>();
-            for(MenuEntity childMenu : menuChildList) {
-                if(childMenu.getParentId()== menu.getId()) {
+        for (MenuDto menu : menuList) {
+            List<MenuDto> childList = new ArrayList<>();
+            for (MenuDto childMenu : menuChildList) {
+                if (childMenu.getParentId() == menu.getId()) {
                     childList.add(childMenu);
                 }
             }
-//            menu.setChild(childList);
+            menu.setChild(childList);
         }
         sortMenu(menuList);
-        for(MenuEntity menu : menuList) {
-//            sortMenu(menu.getChild());
+        for (MenuDto menu : menuList) {
+            sortMenu(menu.getChild());
         }
-        session.setAttribute(Constant.MENU_SESSION, menuList);
-        session.setAttribute(Constant.USER_INFO, user);
-        return ResponseEntity.ok("");
+
+//        session.setAttribute(Constant.MENU_SESSION, menuList);
+//        session.setAttribute(Constant.USER_INFO, user);
+        return ResponseEntity.ok(menuList);
     }
 
 
-    private void sortMenu(List<MenuEntity> menus) {
-        Collections.sort(menus, new Comparator<MenuEntity>() {
+    private void sortMenu(List<MenuDto> menus) {
+        Collections.sort(menus, new Comparator<MenuDto>() {
             @Override
-            public int compare(MenuEntity o1, MenuEntity o2) {
+            public int compare(MenuDto o1, MenuDto o2) {
                 return o1.getOrderIndex() - o2.getOrderIndex();
             }
         });

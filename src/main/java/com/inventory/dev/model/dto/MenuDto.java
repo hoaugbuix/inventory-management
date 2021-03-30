@@ -1,13 +1,15 @@
 package com.inventory.dev.model.dto;
 
+import com.inventory.dev.entity.AuthEntity;
+import com.inventory.dev.entity.MenuEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -18,8 +20,8 @@ public class MenuDto extends AbstractDto<MenuDto> {
     private String url;
     private String name;
     private int orderIndex;
-    private Set auths = new HashSet(0);
-    private List<Menu> child;
+    private Set<AuthEntity> auths;
+    private List<MenuDto> child;
     private String idMenu;
-    private Map<Integer,Integer> mapAuth;
+    private Map<Integer, Integer> mapAuth;
 }

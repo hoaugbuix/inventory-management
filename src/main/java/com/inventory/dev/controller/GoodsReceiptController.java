@@ -9,19 +9,14 @@ import com.inventory.dev.service.InvoiceService;
 import com.inventory.dev.service.ProductService;
 import com.inventory.dev.util.Constant;
 import com.inventory.dev.validate.InvoiceValidator;
+import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,7 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 public class GoodsReceiptController {
     static final Logger log = Logger.getLogger(GoodsReceiptController.class);
     @Autowired
@@ -57,7 +53,7 @@ public class GoodsReceiptController {
     }
 
     @RequestMapping(value = "/goods-receipt/list/{page}")
-    public ResponseEntity<?> showInvoiceList(Model model, HttpSession session, @ModelAttribute("searchForm") InvoiceEntity invoice, @PathVariable("page") int page) {
+    public ResponseEntity<?> showInvoiceList(InvoiceEntity invoice, @PathVariable("page") int page) {
         Paging paging = new Paging(5);
         paging.setIndexPage(page);
         if (invoice == null) {
@@ -65,9 +61,9 @@ public class GoodsReceiptController {
         }
         invoice.setType(Constant.TYPE_GOODS_RECEIPT);
         List<InvoiceEntity> invoices = invoiceService.getList(invoice, paging);
-        if (invoices.isEmpty()) {
-            throw new NotFoundException("Not found!");
-        }
+//        if (invoices.isEmpty()) {
+//            throw new NotFoundException("Not found!");
+//        }
         return ResponseEntity.ok(invoices);
     }
 
@@ -77,7 +73,7 @@ public class GoodsReceiptController {
         log.info("Edit invoice with id=" + id);
         InvoiceEntity invoice = invoiceService.find("id", id).get(0);
         if (invoice != null) {
-           invoiceService.update(invoice);
+            invoiceService.update(invoice);
         }
         return ResponseEntity.ok("Edit success!");
     }
@@ -93,21 +89,16 @@ public class GoodsReceiptController {
     }
 
     @PostMapping("/goods-receipt/save")
-    public ResponseEntity<?> save( @Valid @RequestBody InvoiceEntity invoice) {
+    public ResponseEntity<?> save(@Valid @RequestBody InvoiceEntity invoice) {
+        List<ProductInfoEntity> productInfo = productService.getAllProductInfo(null, null);
         invoice.setType(Constant.TYPE_GOODS_RECEIPT);
-        if (invoice.getId() != null && invoice.getId() != 0) {
-            try {
-                invoiceService.update(invoice);
-            } catch (Exception e) {
-                e.printStackTrace();
-                log.error(e.getMessage());
+        try {
+            for (ProductInfoEntity product: productInfo) {
+                invoice.setProductInfos(product);
             }
-        } else {
-            try {
-                invoiceService.save(invoice);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            invoiceService.save(invoice);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return ResponseEntity.ok(invoice);
 
