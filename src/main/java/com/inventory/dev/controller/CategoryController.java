@@ -14,6 +14,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -40,6 +41,42 @@ public class CategoryController {
             binder.setValidator(categoryValidator);
         }
     }
+
+    // Jdbc
+
+    @GetMapping("/category/get-all")
+    public List<CategoryEntity> getAll(){
+        return categoryService.findAll();
+    }
+
+    @GetMapping("/category/find-one/{id}")
+    public CategoryEntity findOne(@PathVariable int id){
+        CategoryEntity category = categoryService.findById(id);
+        return category;
+    }
+
+    @GetMapping("/category/find-code/{code}")
+    public CategoryEntity findByCode(@PathVariable String code){
+        CategoryEntity category = categoryService.findByCode(code);
+        return category;
+    }
+
+    @PostMapping
+    public CategoryEntity saveCategory(@Valid @RequestBody CategoryEntity category){
+        return categoryService.save(category);
+    }
+
+    @PutMapping
+    public CategoryEntity updateCategory(@Valid @RequestBody CategoryEntity category){
+        return categoryService.update(category);
+    }
+
+    @DeleteMapping
+    public void deleteCategory(@PathVariable int[] id){
+        categoryService.delete(id);
+    }
+
+    //Jpa
 
     @RequestMapping(value = {"/category/list", "/category/list/"})
     public String redirect() {

@@ -79,4 +79,47 @@ public class CategoryServiceImpl implements CategoryService {
         log.info("find category by id =" + id);
         return categoryDAO.findById(CategoryEntity.class, id);
     }
+
+    // Jdbc
+    @Override
+    public List<CategoryEntity> findAll() {
+        return categoryDAO.findAll();
+    }
+
+    @Override
+    public CategoryEntity findById(int id) {
+        return categoryDAO.findOne(id);
+    }
+
+    @Override
+    public CategoryEntity findByCode(String code) {
+        return categoryDAO.findByCode(code);
+    }
+
+    @Override
+    public CategoryEntity save(CategoryEntity category) {
+        category.setActiveFlag(1);
+        category.setCreatedDate(new Date());
+        category.setUpdatedDate(new Date());
+       int id = categoryDAO.saveCategory(category);
+       return categoryDAO.findOne(id);
+    }
+
+    @Override
+    public CategoryEntity update(CategoryEntity updateCategory) {
+        CategoryEntity oldCate = categoryDAO.findOne(updateCategory.getId());
+        updateCategory.setCreatedDate(oldCate.getCreatedDate());
+        updateCategory.setUpdatedDate(new Date());
+        categoryDAO.updateCategory(updateCategory);
+        return categoryDAO.findOne(updateCategory.getId());
+    }
+
+    @Override
+    public void delete(int[] ids) {
+        for (int id : ids){
+            //1.delete comment (khoa ngoai new_id)
+            //2.delete news
+            categoryDAO.deleteCategory(id);
+        }
+    }
 }

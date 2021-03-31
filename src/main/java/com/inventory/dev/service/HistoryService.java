@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface HistoryService {
-    public List<HistoryEntity> getAll(HistoryEntity history, Paging paging);
+    List<HistoryEntity> getAll(HistoryEntity history, Paging paging);
 
-    public void save(InvoiceEntity invoice, String action);
+    void save(InvoiceEntity invoice, String action);
 }

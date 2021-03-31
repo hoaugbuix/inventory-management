@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface ProductInStockService {
-    public List<ProductInStockEntity> getAll(ProductInStockEntity productInStock, Paging paging);
+    List<ProductInStockEntity> getAll(ProductInStockEntity productInStock, Paging paging);
 
-    public void saveOrUpdate(InvoiceEntity invoice) throws Exception;
+    void saveOrUpdate(InvoiceEntity invoice) throws Exception;
 }

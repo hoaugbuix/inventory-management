@@ -8,15 +8,23 @@ import java.util.List;
 
 @Service
 public interface CategoryService {
-    public void saveCategory(CategoryEntity category) throws Exception;
+    void saveCategory(CategoryEntity category) throws Exception;
 
-    public void updateCategory(CategoryEntity category) throws Exception;
+    void updateCategory(CategoryEntity category) throws Exception;
 
-    public void deleteCategory(CategoryEntity category) throws Exception;
+    void deleteCategory(CategoryEntity category) throws Exception;
 
-    public List<CategoryEntity> findCategory(String property, Object value);
+    List<CategoryEntity> findCategory(String property, Object value);
 
-    public List<CategoryEntity> getAllCategory(CategoryEntity category, Paging paging);
+    List<CategoryEntity> getAllCategory(CategoryEntity category, Paging paging);
 
-    public CategoryEntity findByIdCategory(int id);
+    CategoryEntity findByIdCategory(int id);
+
+    // Jdbc
+    List<CategoryEntity> findAll();
+    CategoryEntity findById(int id);
+    CategoryEntity findByCode(String code);
+    CategoryEntity save(CategoryEntity category);
+    CategoryEntity update(CategoryEntity category);
+    void delete(int[] ids);
 }

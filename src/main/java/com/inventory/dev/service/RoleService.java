@@ -8,15 +8,15 @@ import java.util.List;
 
 @Service
 public interface RoleService {
-    public List<RoleEntity> getRoleList(RoleEntity role, Paging paging);
+    List<RoleEntity> getRoleList(RoleEntity role, Paging paging);
 
-    public void saveRole(RoleEntity role) throws Exception;
+    void saveRole(RoleEntity role) throws Exception;
 
-    public void updateRole(RoleEntity role) throws Exception;
+    void updateRole(RoleEntity role) throws Exception;
 
-    public void deleteRole(RoleEntity role) throws Exception;
+    void deleteRole(RoleEntity role) throws Exception;
 
-    public List<RoleEntity> findRole(String property, Object value);
+    List<RoleEntity> findRole(String property, Object value);
 
-    public RoleEntity findByIdRole(int id);
+    RoleEntity findByIdRole(int id);
 }

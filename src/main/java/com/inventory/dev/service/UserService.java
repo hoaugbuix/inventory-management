@@ -9,17 +9,29 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    public List<UserEntity> findByProperty(String property, Object value);
+    List<UserEntity> findByProperty(String property, Object value);
 
-    public UserEntity findById(int id);
+    UserEntity findById(int id);
 
-    public UserEntity createUser(CreateUserReq req);
+    UserEntity createUser(CreateUserReq req);
 
-    public void save(UserEntity user);
+    void save(UserEntity user);
 
-    public void update(UserEntity users);
+    void update(UserEntity users);
 
-    public void deleteUser(UserEntity user);
+    void deleteUser(UserEntity user);
 
-    public List<UserEntity> getUsersList(UserEntity users, Paging paging);
+    List<UserEntity> getUsersList(UserEntity users, Paging paging);
+
+    // Jdbc
+//    void insert(UserEntity user);
+//
+//    void updateUser(UserEntity user);
+//
+//    void deleteUser(int id);
+//
+//    List<UserEntity> findAll();
+//
+//    UserEntity getUserById(int id);
+
 }

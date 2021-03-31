@@ -9,9 +9,9 @@ import java.util.List;
 
 @Service
 public interface MenuService {
-    public List<MenuEntity> getListMenu(Paging paging, MenuEntity menu);
+    List<MenuEntity> getListMenu(Paging paging, MenuEntity menu);
 
-    public void changeStatus(Integer id) throws Exception;
+    void changeStatus(Integer id) throws Exception;
 
-    public void updatePermission(int roleId, int menuId, int permission) throws Exception;
+    void updatePermission(int roleId, int menuId, int permission) throws Exception;
 }

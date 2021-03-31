@@ -7,12 +7,26 @@ import com.inventory.dev.model.request.CreateUserReq;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class UserMapper {
+public class UserMapper implements RowMapper<UserEntity> {
+    @Override
+    public UserEntity mapRow(ResultSet resultSet) {
+        try {
+            UserEntity user = new UserEntity();
+            user.setId(resultSet.getInt("id"));
+            return user;
+        }catch (SQLException e){
+            return null;
+        }
+    }
+
+
     public static UserEntity toUserEntityReq(CreateUserReq req) {
         UserEntity user = new UserEntity();
         user.setFirstName(req.getFirstName());
@@ -85,4 +99,6 @@ public class UserMapper {
         tmp.setCreatedDate(user.getCreatedDate());
         return tmp;
     }
+
+
 }

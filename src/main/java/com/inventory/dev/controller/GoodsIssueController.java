@@ -101,4 +101,24 @@ public class GoodsIssueController {
         return ResponseEntity.ok("Success");
     }
 
+//    @GetMapping("/goods-issue/export")
+//    public ModelAndView exportReport() {
+//        ModelAndView modelAndView = new ModelAndView();
+//        InvoiceEntity invoice = new InvoiceEntity();
+//        invoice.setType(Constant.TYPE_GOODS_ISSUES);
+//        List<InvoiceEntity> invoices = invoiceService.getList(invoice, null);
+//        modelAndView.addObject(Constant.KEY_GOODS_RECEIPT_REPORT, invoices);
+//        modelAndView.setView(new GoodsReceiptReport());
+//        return modelAndView;
+//    }
+
+
+//    private Map<String, String> initMapProduct() {
+//        List<ProductInfoEntity> productInfos = productService.getAllProductInfo(null, null);
+//        Map<String, String> mapProduct = new HashMap<>();
+//        for (ProductInfoEntity productInfo : productInfos) {
+//            mapProduct.put(productInfo.getId().toString(), productInfo.getName());
+//        }
+//        return mapProduct;
+//    }
 }

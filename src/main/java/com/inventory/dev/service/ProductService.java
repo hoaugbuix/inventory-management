@@ -10,20 +10,17 @@ import java.util.List;
 
 @Service
 public interface ProductService {
+    void saveProductInfo(ProductInfoEntity productInfo) throws Exception;
 
+    void updateProductInfo(ProductInfoEntity productInfo) throws Exception;
 
-    // PRODUCT INFO
-    public void saveProductInfo(ProductInfoEntity productInfo) throws Exception;
+    void deleteProductInfo(ProductInfoEntity productInfo) throws Exception;
 
-    public void updateProductInfo(ProductInfoEntity productInfo) throws Exception;
+    List<ProductInfoEntity> findProductInfo(String property, Object value);
 
-    public void deleteProductInfo(ProductInfoEntity productInfo) throws Exception;
+    List<ProductInfoEntity> getAllProductInfo(ProductInfoEntity productInfo, Paging paging);
 
-    public List<ProductInfoEntity> findProductInfo(String property, Object value);
-
-    public List<ProductInfoEntity> getAllProductInfo(ProductInfoEntity productInfo, Paging paging);
-
-    public ProductInfoEntity findByIdProductInfo(int id);
+    ProductInfoEntity findByIdProductInfo(int id);
 
     void processUploadFile(MultipartFile multipartFile, String fileName) throws IllegalStateException, IOException;
 }
