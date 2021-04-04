@@ -1,5 +1,6 @@
 package com.inventory.dev.security;
 
+import com.inventory.dev.dao.UserDAO;
 import com.inventory.dev.entity.UserEntity;
 import com.inventory.dev.exception.NotFoundException;
 import com.inventory.dev.repository.UserRepository;
@@ -13,17 +14,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
     final static Logger log = Logger.getLogger(JwtUserDetailsService.class);
-
-
     @Autowired
-    UserRepository userRepository;
+    private UserDAO<UserEntity> userDAO;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByEmail(s)
-                .orElseThrow(() ->
-                        new NotFoundException("User not found [email: " + s + "]")
-                );
+        log.info(s + "email");
+        UserEntity user = userDAO.getUserByEmailJdbc(s);
+//        log.info( "user" + user.toString());
         if (user != null) {
             return new CustomUserDetails(user);
         } else {

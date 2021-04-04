@@ -12,25 +12,32 @@ import java.util.List;
 @Transactional(rollbackFor = Exception.class)
 public class InvoiceDAOImpl extends BaseDAOImpl<InvoiceEntity> implements InvoiceDAO<InvoiceEntity> {
     @Override
-    public InvoiceEntity saveJdbc(InvoiceEntity instance) {
-        return null;
+    public Integer saveInvoiceJdbc(InvoiceEntity invoice) {
+        StringBuilder sql = new StringBuilder("INSERT INTO invoice (code, type, product_id, qty, price, to_date, from_date, active_flag, created_date, updated_date)");
+        sql.append(" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        return insertJdbc(sql.toString(), invoice.getCode(), invoice.getType(), invoice.getProductInfos(), invoice.getQty(),
+                invoice.getPrice(), invoice.getToDate(), invoice.getFromDate(),
+                invoice.getCreatedDate(), invoice.getUpdatedDate());
     }
 
     @Override
-    public InvoiceEntity updateJdbc(InvoiceEntity instance) {
-        return null;
+    public void updateInvoiceJdbc(InvoiceEntity invoice) {
+        StringBuilder sql = new StringBuilder("UPDATE invoice SET code = ?, type = ?, product_id = ?, qty = ?, price = ?, to_date = ?, from_date = ?, active_flag = ?, created_date = ?, updated_date = ?)");
+        updateJdbc(sql.toString(), invoice.getCode(), invoice.getType(), invoice.getProductInfos(), invoice.getQty(),
+                invoice.getPrice(), invoice.getToDate(), invoice.getFromDate(),
+                invoice.getCreatedDate(), invoice.getUpdatedDate());
     }
 
     @Override
-    public List<InvoiceEntity> findAll() {
+    public List<InvoiceEntity> findAllInvoiceJdbc() {
         String sql = "select * from invoice";
         return queryJdbc(sql, new InvoiceMapper());
     }
 
     @Override
-    public InvoiceEntity findOne(int id) {
+    public InvoiceEntity findOneInvoiceJdbc(int id) {
         String sql = "Select * from invoice where id = ?";
         List<InvoiceEntity> invoice = queryJdbc(sql, new InvoiceMapper(), id);
-        return null;
+        return invoice.isEmpty() ? null : invoice.get(0);
     }
 }

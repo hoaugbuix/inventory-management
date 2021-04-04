@@ -3,7 +3,7 @@ package com.inventory.dev.dao;
 import java.util.List;
 
 public interface HistoryDAO<E> extends BaseDAO<E> {
-    List<E> findAllJdbc();
+    List<E> findAllHistoryJdbc();
 
-    Integer saveJdbc(E instance);
+    Integer saveHistoryJdbc(E instance);
 }

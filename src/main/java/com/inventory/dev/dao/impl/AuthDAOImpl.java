@@ -2,6 +2,7 @@ package com.inventory.dev.dao.impl;
 
 import com.inventory.dev.dao.AuthDAO;
 import com.inventory.dev.entity.AuthEntity;
+import com.inventory.dev.model.mapper.AuthMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
@@ -28,5 +29,29 @@ public class AuthDAOImpl extends BaseDAOImpl<AuthEntity> implements AuthDAO<Auth
             return auths.get(0);
         }
         return null;
+    }
+
+    //jdbc
+
+    @Override
+    public AuthEntity findAuthByRoleIdAndMenuIdJdbc(int roleId, int menuId) {
+        String sql = "SELECT * FROM auth  where  role_id = ? and menu_id = ? ";
+        List<AuthEntity> auth = queryJdbc(sql, new AuthMapper(), roleId, menuId);
+        return auth.isEmpty() ? null : auth.get(0);
+    }
+
+    @Override
+    public Integer SaveAuthJdbc(AuthEntity auth) {
+        StringBuilder sql = new StringBuilder("INSERT INTO auth ");
+        sql.append("(role_id, menu_id, permission, active_flag, created_date, updated_date)");
+        sql.append("VALUES (?, ?, ?, ?, ?, ?)");
+        return insertJdbc(sql.toString(),auth.getRoles(), auth.getMenus(), auth.getPermission(), auth.getActiveFlag(), auth.getCreatedDate(), auth.getUpdatedDate() );
+    }
+
+    @Override
+    public void updateAuthJdbc(AuthEntity auth) {
+        StringBuilder sql = new StringBuilder("UPDATE auth SET");
+        sql.append("role_id = ?, menu_id = ?, permission = ?, active_flag = ?, created_date = ?, updated_date = ?");
+        updateJdbc(sql.toString(),auth.getRoles(), auth.getMenus(), auth.getPermission(), auth.getActiveFlag(), auth.getCreatedDate(), auth.getUpdatedDate() );
     }
 }

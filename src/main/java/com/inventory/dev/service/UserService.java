@@ -24,14 +24,14 @@ public interface UserService {
     List<UserEntity> getUsersList(UserEntity users, Paging paging);
 
     // Jdbc
-//    void insert(UserEntity user);
-//
-//    void updateUser(UserEntity user);
-//
-//    void deleteUser(int id);
-//
-//    List<UserEntity> findAll();
-//
-//    UserEntity getUserById(int id);
+    UserEntity saveUserJdbc(CreateUserReq req);
+
+    void updateUserJdbc(UserEntity user);
+
+    void deleteUserJdbc(int[] ids);
+
+    List<UserEntity> findAllUserJdbc();
+
+    UserEntity getUserByIdJdbc(int id);
 
 }

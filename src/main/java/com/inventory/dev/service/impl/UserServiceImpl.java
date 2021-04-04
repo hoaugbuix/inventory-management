@@ -1,12 +1,15 @@
 package com.inventory.dev.service.impl;
 
+import com.inventory.dev.dao.RoleDAO;
 import com.inventory.dev.dao.UserDAO;
 import com.inventory.dev.dao.UserRoleDAO;
 import com.inventory.dev.entity.Paging;
 import com.inventory.dev.entity.RoleEntity;
 import com.inventory.dev.entity.UserEntity;
 import com.inventory.dev.entity.UserRoleEntity;
+import com.inventory.dev.exception.BadRequestException;
 import com.inventory.dev.exception.DuplicateRecordException;
+import com.inventory.dev.exception.NotFoundException;
 import com.inventory.dev.model.mapper.UserMapper;
 import com.inventory.dev.model.request.CreateUserReq;
 import com.inventory.dev.repository.RoleRepository;
@@ -15,6 +18,7 @@ import com.inventory.dev.service.UserService;
 import com.inventory.dev.util.HashingPassword;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -37,6 +41,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private RoleDAO<RoleEntity> roleDAO;
+
     @Override
     public List<UserEntity> findByProperty(String property, Object value) {
         log.info("Find user by property start ");
@@ -54,7 +61,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity createUser(CreateUserReq req) {
         // Check email exist
         UserEntity users = userRepository.findByEmailAndUsername(req.getEmail(), req.getUsername());
-        if (users.getEmail().equals(req.getEmail())) {
+        if (users != null) {
             throw new DuplicateRecordException("Email đã tồn tại trong hệ thống. Vui lòng sử dụng email khác.");
         }
 
@@ -130,5 +137,71 @@ public class UserServiceImpl implements UserService {
             }
         }
         return userDAO.findAll(queryStr.toString(), mapParams, paging);
+    }
+
+
+    //Jdbc
+
+    @Override
+    public UserEntity saveUserJdbc(CreateUserReq req) {
+//        log.info("User req" + req.toString());
+        UserEntity user = userDAO.getUserByEmailAndUsernameJdbc(req.getEmail(), req.getUsername());
+       if (user != null){
+           throw new DuplicateRecordException("exiting");
+       }
+       user = UserMapper.toUserEntityReq(req);
+//       user.setRoles(Collections.singleton(roleDAO.findRoleByRoleNameJdbc("user")));
+       int id = userDAO.saveUserJdbc(user);;
+       RoleEntity role = roleDAO.findRoleByRoleNameJdbc("user");
+       UserRoleEntity userRole = new UserRoleEntity();
+            userRole.setUsers(user);
+            userRole.setRoles(role);
+            userRole.setActiveFlag(1);
+            userRole.setCreatedDate(new Date());
+            userRole.setUpdatedDate(new Date());
+            try {
+                userRoleDAO.saveUserRoleJdbc(userRole);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        return userDAO.getUserByIdJdbc(id);
+    }
+
+    @Override
+    public void updateUserJdbc(UserEntity user) {
+        String hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12));
+        user.setPassword(hash);
+        user.setActiveFlag(1);
+        user.setCreatedDate(new Date());
+        user.setUpdatedDate(new Date());
+        userDAO.saveUserJdbc(user);
+        List<RoleEntity>roles = roleDAO.findAllRoleJdbc();
+        for (RoleEntity role : roles) {
+            UserRoleEntity userRole = userRoleDAO.findUserRoleByUserIdAndRoleId(user.getId(), role.getId());
+            userRole.setUsers(user);
+            userRole.setRoles(role);
+            userRole.setActiveFlag(1);
+            userRole.setCreatedDate(new Date());
+            userRole.setUpdatedDate(new Date());
+            userRoleDAO.saveUserRoleJdbc(userRole);
+        }
+    }
+
+    @Override
+    public void deleteUserJdbc(int[] ids) {
+        for (int id : ids){
+            userDAO.deleteUserJdbc(id);
+        }
+    }
+
+    @Override
+    public List<UserEntity> findAllUserJdbc() {
+        return userDAO.findAllUserJdbc();
+    }
+
+    @Override
+    public UserEntity getUserByIdJdbc(int id) {
+        return userDAO.getUserByIdJdbc(id);
     }
 }

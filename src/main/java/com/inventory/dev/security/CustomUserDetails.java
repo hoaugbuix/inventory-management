@@ -26,13 +26,13 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        HashSet<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        Set<RoleEntity> roles = user.getRoles();
-        for (RoleEntity role : roles) {
-            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
+        logger.info(user);
+        Set<GrantedAuthority> roles = new HashSet<>();
+        for (RoleEntity role : user.getRoles()) {
+            roles.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
         }
 //        logger.info("authorities : {}" + grantedAuthorities);
-        return grantedAuthorities;
+        return roles;
     }
 
     @Override

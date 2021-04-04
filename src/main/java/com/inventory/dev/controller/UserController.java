@@ -66,7 +66,7 @@ public class UserController {
     public ResponseEntity<?> register(@Valid @RequestBody CreateUserReq req, HttpServletResponse response) {
         // Create user
 
-        UserEntity result = userService.createUser(req);
+        UserEntity result = userService.saveUserJdbc(req);
 
         // Gen token
         UserDetails principal = new CustomUserDetails(result);
@@ -76,12 +76,7 @@ public class UserController {
         cookie.setMaxAge(MAX_AGE_COOKIE);
         cookie.setPath("/");
         response.addCookie(cookie);
-        try {
-            return ResponseEntity.ok(UserMapper.toUserDto(result));
-        } catch (Exception e) {
-            log.error(e);
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(UserMapper.toUserDto(result));
     }
 
 

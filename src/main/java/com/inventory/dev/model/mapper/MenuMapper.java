@@ -5,11 +5,13 @@ import com.inventory.dev.entity.MenuEntity;
 import com.inventory.dev.model.dto.MenuDto;
 import org.springframework.stereotype.Component;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 
 @Component
-public class MenuMapper {
+public class MenuMapper implements RowMapper<MenuEntity> {
     public static MenuEntity toMenuEntity(MenuDto dto) {
         MenuEntity menu = new MenuEntity();
         menu.setId(dto.getId());
@@ -43,5 +45,16 @@ public class MenuMapper {
             dto.setMapAuth(newObj);
         }
         return dto;
+    }
+
+    @Override
+    public MenuEntity mapRow(ResultSet resultSet) {
+        try {
+            MenuEntity menu = new MenuEntity();
+            menu.setId(resultSet.getInt("id"));
+            return menu;
+        }catch (SQLException e){
+            return null;
+        }
     }
 }
