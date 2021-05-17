@@ -16,6 +16,7 @@ CREATE PROCEDURE user_create(
 )
 
 body:BEGIN
+	declare newid int;
 	SET max_sp_recursion_depth=255;
 	if(select count(user.id) from user where user.user_name and user.email) > 0 then
 		SET @message_text = CONCAT('User name \'', user_name, '\' already exists');
@@ -23,8 +24,10 @@ body:BEGIN
     else
 		insert into user(first_name, last_name, avatar, user_name, password, email, active_flag, created_date, updated_date)
         values (_first_name, _last_name, _avatar, _user_name, _password, _email, _active_flag, _created_date, _updated_date);
-        select * from user where email = _email and user_name = _user_name;
+        -- select id from user where email = _email and user_name = _user_name;
+        set newId = last_insert_id();
     end if;
+    select newId;
 END$$
 DELIMITER ;
 
