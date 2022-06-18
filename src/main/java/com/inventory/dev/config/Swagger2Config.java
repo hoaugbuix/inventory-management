@@ -2,52 +2,59 @@ package com.inventory.dev.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import org.springframework.web.bind.annotation.RequestMethod;
-import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import static com.google.common.collect.Lists.newArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableSwagger2
 public class Swagger2Config {
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+
+    private ApiKey apiKey() {
+        return new ApiKey("JWT", AUTHORIZATION_HEADER, "header");
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfo(
+                "Spring Boot Blog REST APIs",
+                "Spring Boot Blog REST API Documentation",
+                "1",
+                "Terms of service",
+                new Contact("", "", ""),
+                "License of API",
+                "API license URL",
+                Collections.emptyList()
+        );
+    }
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+//                .securityContexts(Collections.singletonList(securityContext()))
+//                .securitySchemes(Collections.singletonList(apiKey()))
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.inventory.dev.controller"))
-                .paths(PathSelectors.regex("/api/"))
-                .build()
-                .apiInfo(apiEndPointsInfo())
-                .globalResponseMessage(RequestMethod.GET,
-                        newArrayList(new ResponseMessageBuilder()
-                                        .code(500)
-                                        .message("500 message")
-                                        .responseModel(new ModelRef("Error"))
-                                        .build(),
-                                new ResponseMessageBuilder()
-                                        .code(403)
-                                        .message("Forbidden!")
-                                        .build()));
+                .paths(PathSelectors.regex("/.*"))
+                .build();
     }
 
-    private ApiInfo apiEndPointsInfo() {
-        return new ApiInfoBuilder()
-                .title("Inventory Management")
-                .description("Inventory Management REST API")
-                .contact(new Contact("BH", "", "buihoang9b8@gmail.com"))
-                .license("Apache 2.0")
-                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
-                .version("1.0.0")
-                .build();
+    private SecurityContext securityContext() {
+        return SecurityContext.builder().securityReferences(defaultAuth()).build();
+    }
+
+    private List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return Collections.singletonList(new SecurityReference("JWT", authorizationScopes));
     }
 }

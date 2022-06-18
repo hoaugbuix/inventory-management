@@ -1647,3 +1647,113 @@
 2021-04-01 18:57:35 INFO  JwtUserDetailsService:22 - buihoangsp59@gmail.comemail
 2021-04-01 18:57:35 INFO  CustomUserDetails:29 - BaseEntity(id=84, activeFlag=1, createdDate=2021-04-01, updatedDate=2021-04-01)
 2021-04-01 18:57:35 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:28:29 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2022-06-18 09:28:46 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2022-06-18 09:30:46 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2022-06-18 09:31:14 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2022-06-18 09:32:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:32:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:32:32 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:32:32 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:13 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2022-06-18 09:33:23 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:23 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:28 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:29 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:32 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:32 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:34 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:34 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:37 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:37 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:33:39 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:33:40 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:09 INFO  TwilioInitializer:22 - Twilio initialized ... with account sid {} AC964d645286330c12560a712901c4c2ef
+2022-06-18 09:38:18 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:18 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:18 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:18 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:18 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:18 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:18 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:18 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:18 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:18 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:18 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:18 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:18 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:18 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:18 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:18 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:18 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:18 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:18 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:18 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:19 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:19 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:19 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:19 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:38:24 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:38:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:40:16 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:40:17 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:40:17 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:40:17 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:40:19 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:40:19 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:40:22 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:40:22 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:40:27 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:40:27 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:40:34 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:40:34 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:40:37 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:40:37 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:41:09 INFO  MenuServiceImpl:30 - show all menu
+2022-06-18 09:41:09 INFO  BaseDAOImpl:48 - find all record from db
+2022-06-18 09:41:10 INFO  BaseDAOImpl:71 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2022-06-18 09:41:10 INFO  RoleServiceImpl:27 - getRoleList{}
+2022-06-18 09:41:10 INFO  BaseDAOImpl:48 - find all record from db
+2022-06-18 09:41:10 INFO  BaseDAOImpl:71 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2022-06-18 09:41:17 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:41:17 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:41:22 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:41:22 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:41:26 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:41:26 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:41:38 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:41:38 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:41:38 INFO  MenuServiceImpl:30 - show all menu
+2022-06-18 09:41:38 INFO  BaseDAOImpl:48 - find all record from db
+2022-06-18 09:41:38 INFO  BaseDAOImpl:71 - Query find all ====> from com.inventory.dev.entity.MenuEntity as model where model.activeFlag=1 or model.activeFlag=0
+2022-06-18 09:41:38 INFO  RoleServiceImpl:27 - getRoleList{}
+2022-06-18 09:41:38 INFO  BaseDAOImpl:48 - find all record from db
+2022-06-18 09:41:38 INFO  BaseDAOImpl:71 - Query find all ====> from com.inventory.dev.entity.RoleEntity as model where model.activeFlag=1
+2022-06-18 09:41:46 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:41:46 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:41:51 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:41:51 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:41:57 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:41:57 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
+2022-06-18 09:42:23 INFO  JwtUserDetailsService:22 - buihoang9b8email
+2022-06-18 09:42:24 ERROR JwtRequestFilter:65 - Could not set user authentication in security contextjava.lang.NullPointerException
